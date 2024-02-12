@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="characters-box">
+            <% characters.forEach((character) => { %>
+                <div class="character">
+                    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image">
+                    <div class="names">
+                        <h1><%= character.arabicName %></h1>
+                        <h1><%= character.englishName %></h1>
+                    </div>
+                    <div class="info">
+                        <p><%= character.desc %></p>
+                        <p><%= character.nationality %></p>
+                        <p><%= character.residence %></p>
+                        <p><%= character.birthday %></p>
+                        <p><%= character.catg %></p>
+                        <p><%= character.job %></p>
+                    </div>
+                    <a href="/character/<%= character._id %>">show more</a>
+                </div>
+            <% }) %>
+        </div>
+        <a href="/companies">Companies Page</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="characters-box">
+            <% companies.forEach((company) => { %>
+                <div class="character">
+                    <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image">
+                    <div class="names">
+                        <h1><%= company.arabicName %></h1>
+                        <h1><%= company.englishName %></h1>
+                    </div>
+                    <div class="info">
+                        <p><%= company.country %></p>
+                        <p><%= company.mainBranch %></p>
+                        <p><%= company.catg %></p>
+                        <p><%= company.code %> <%= company.phoneNumber %></p>
+                        <p><%= company.website %></p>
+                        <p><%= company.internetLocation %></p>
+                        <p><%= company.email %></p>
+                        <p><%= company.desc %></p>
+                    </div>
+                    <a href="/character/<%= company._id %>">show more</a>
+                </div>
+            <% }) %>
+        </div>
+        <a href="/">Characters Page</a>
+    </div>
+</body>
+</html>
