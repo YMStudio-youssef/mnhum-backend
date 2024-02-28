@@ -17,6 +17,13 @@
                         </div>
                     </div>
                     <div class="tab1 tab-content" id="tab1">
+                        <form action="/companyCustom" method="post" novalidate>
+                            <div class="input-row">
+                                <label for="custom">Custome Fields: </label>
+                                <input type="number" class="full-input" id="custome" name="fieldsNumber" placeholder=" Number Of The Custom Fields You Want ">
+                            </div>
+                            <button type="submit">Add Fields</button>
+                        </form>
                         <div class="info-add">
                             <h2 class="title">معلومات المؤسسة</h2>
                             <form action="/addCompany" method="post" enctype="multipart/form-data" novalidate>
@@ -95,6 +102,26 @@
                                     <textarea id="info" cols="30" rows="10" name="info"></textarea>
                                     <br>
                                 </div>
+
+                                <% if (fieldsCount !== 0) { %>
+                                    <% for (let i = 0; i < fieldsCount; i++) { %>
+                                        <div class="input-group">
+                                            <br>
+                                            <br>
+                                            <div class="input-row">
+                                                <label for="customName<%= i %>">Custom Field <%= i + 1 %> Name:</label>
+                                                <input type="text" id="customName<%= i %>" name="customName<%= i %>">
+                                            </div>
+                                            <div class="input-row">
+                                                <label for="customValue<%= i %>">Custom Field <%= i + 1 %> Value:</label>
+                                                <input type="text" id="customValue<%= i %>" name="customValue<%= i %>">
+                                            </div>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+
                                 <button type="submit">حفظ وانهاء البيانات</button> 
                             </form>
                         </div>

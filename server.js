@@ -97,7 +97,7 @@ const characterSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-})
+}, {strict: false})
 
 const companySchema = new mongoose.Schema({
     image: String,
@@ -116,7 +116,7 @@ const companySchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-})
+}, {strict: false})
 
 const catgSchema = new mongoose.Schema({
     image: String,
@@ -221,8 +221,9 @@ app.get('/addcharacter', ensureAuthenticated, async (req, res) => {
     const characterCount = await Character.countDocuments()
     const companyCount = await Company.countDocuments()
     const DocumentsCount = characterCount + companyCount
+    var fieldsCount = 0
 
-    res.render('admin/addcharacter', {DocumentsCount, Footer, catgs, tags, user: req.user, countries: countries, texts, btnColor, headingColor1, headingColor2, headingColor3} )
+    res.render('admin/addcharacter', {DocumentsCount, Footer, catgs, tags, user: req.user, countries: countries, texts, btnColor, headingColor1, headingColor2, headingColor3, fieldsCount})
 })
 
 app.get('/character/:id', async (req, res) => {
@@ -274,6 +275,24 @@ app.get('/character/:id', async (req, res) => {
         });
 });
 
+app.post('/characterCustom', async (req, res) => {
+  const catgs = await Catg.find()
+  const Footer = await Color.findOne({name: 'Footer'})
+  const countries = await Country.find()
+  const texts = await Text.find({})
+  const btnColor = await Color.findOne({name: 'btn-color'})
+  const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
+  const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
+  const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
+  const tags = await Tag.find()
+  const characterCount = await Character.countDocuments()
+  const companyCount = await Company.countDocuments()
+  const DocumentsCount = characterCount + companyCount
+  const fieldsCount = req.body.fieldsNumber
+
+  res.render('admin/addcharacter', {fieldsCount, DocumentsCount, Footer, catgs, tags, user: req.user, countries: countries, texts, btnColor, headingColor1, headingColor2, headingColor3})
+})
+
 app.post('/addCharacter', async (req, res) => {
   try {
     await uploadPromise(req, res);
@@ -281,7 +300,7 @@ app.post('/addCharacter', async (req, res) => {
     const data = fs.readFileSync(req.file.path);
     const imageBuffer = Buffer.from(data);
 
-    const character = new Character({
+    const characterData = {
       image: imageBuffer.toString('base64'),
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -294,7 +313,18 @@ app.post('/addCharacter', async (req, res) => {
       desc: req.body.info,
       historicalPeriod: req.body.histperiod,
       catg: req.body.catg,
+    };
+
+    // Get the custom field names and values from the request body
+    const customFields = Object.keys(req.body).filter(key => key.startsWith('customName'));
+    customFields.forEach(field => {
+      const index = field.slice(10); // Extract the index from the field name
+      const fieldName = req.body[`customName${index}`];
+      const fieldValue = req.body[`customValue${index}`];
+      characterData[fieldName] = fieldValue;
     });
+
+    const character = new Character(characterData);
 
     character.save()
       .then(() => {
@@ -324,8 +354,27 @@ app.get('/addcompany', ensureAuthenticated, async (req, res) => {
     const characterCount = await Character.countDocuments()
     const companyCount = await Company.countDocuments()
     const DocumentsCount = characterCount + companyCount
+    var fieldsCount = 0
 
-    res.render('admin/addCompany', {DocumentsCount, Footer, countries, catgs, tags, user: req.user, texts, headingColor1, headingColor2, headingColor3, btnColor})
+    res.render('admin/addCompany', {fieldsCount, DocumentsCount, Footer, countries, catgs, tags, user: req.user, texts, headingColor1, headingColor2, headingColor3, btnColor})
+})
+
+app.post('/companyCustom', async (req, res) => {
+  const catgs = await Catg.find()
+  const Footer = await Color.findOne({name: 'Footer'})
+  const texts = await Text.find({})
+  const btnColor = await Color.findOne({name: 'btn-color'})
+  const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
+  const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
+  const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
+  const tags = await Tag.find()
+  const countries = await Country.find({})
+  const characterCount = await Character.countDocuments()
+  const companyCount = await Company.countDocuments()
+  const DocumentsCount = characterCount + companyCount
+  var fieldsCount = req.body.fieldsNumber
+
+  res.render('admin/addCompany', {fieldsCount, DocumentsCount, Footer, countries, catgs, tags, user: req.user, texts, headingColor1, headingColor2, headingColor3, btnColor})
 })
 
 app.get('/company/:id', async (req, res) => {
@@ -384,7 +433,7 @@ app.post('/addCompany', async (req, res) => {
     const data = fs.readFileSync(req.file.path);
     const imageBuffer = Buffer.from(data);
 
-    const company = new Company({
+    const companyData = {
       image: imageBuffer.toString('base64'),
       arabicName: req.body.arabname,
       englishName: req.body.englname,
@@ -397,11 +446,22 @@ app.post('/addCompany', async (req, res) => {
       internetLocation: req.body.internetlocation,
       email: req.body.email,
       desc: req.body.info,
+    };
+
+    // Get the custom field names and values from the request body
+    const customFields = Object.keys(req.body).filter(key => key.startsWith('customName'));
+    customFields.forEach(field => {
+      const index = field.slice(10); // Extract the index from the field name
+      const fieldName = req.body[`customName${index}`];
+      const fieldValue = req.body[`customValue${index}`];
+      companyData[fieldName] = fieldValue;
     });
+
+    const company = new Company(companyData);
 
     company.save()
       .then(() => {
-        console.log('Company saved!');
+        console.log('Character saved!');
         res.redirect('/');
       })
       .catch((err) => {
@@ -501,7 +561,7 @@ app.post('/deleteCharacter', async (req, res) => {
     Character.findOneAndDelete({firstName: req.body.character})
     .then(() => {
         console.log('character deleted |_^-^_|')
-        res.redirect('/characters')
+        res.redirect('/admin/tables/')
     })
     .catch((err) => {
         console.error('error: ' + err)
@@ -512,7 +572,7 @@ app.post('/deleteCompany', (req, res) => {
     Company.findOneAndDelete({arabicName: req.body.company})
     .then(() => {
         console.log('company deleted |_^-^_|')
-        res.redirect('/admin/companies')
+        res.redirect('/admin/tables/')
     })
     .catch((err) => {
         console.error('error: ' + err)
@@ -524,7 +584,7 @@ app.post('/deleteCatgs', async (req, res) => {
         await Catg.findOneAndDelete({title: req.body.catg}).then(() => {console.log('Catg Deleted |_^-^_|')})
         await Character.deleteMany({catg: req.body.catg}).then(() => {console.log(' Characters Deleted |_^-^_| ')})
         await Company.deleteMany({catg: req.body.catg}).then(() => {console.log(' Company Deleted |_^-^_| ')})
-        res.redirect('/')
+        res.redirect('/admin/tables')
     } catch (error) {
         console.error(error)
     }
@@ -727,7 +787,7 @@ app.post('/addtag', (req, res) => {
     tag.save()
     .then(() => {
         console.log("tag saved ! ^-^")
-        res.redirect('/')
+        res.redirect('/admin/tables')
     })
     .catch((err) => {
         console.error(err)
@@ -766,24 +826,11 @@ app.post("/addCountry", (req, res) => {
     newCountry.save()
     .then(() => {
         console.log("Country Saved ! ^-^")
+        res.redirect('/admin/tables')
     })
     .catch((err) => {
         console.error(err)
     })
-})
-
-app.get('/admin/companies', async (req, res) => {
-    const columnNames = await Object.keys(companySchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
-    const companies = await Company.find()
-
-    res.render('admin/companies', {companies, columnNames})
-})
-
-app.get('/admin/catgs', async (req, res) => {
-    const columnNames = await Object.keys(catgSchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
-    const catgs = await Catg.find()
-
-    res.render('admin/catgs', {catgs, columnNames})
 })
 
 app.post('/characterVisits', async (req, res) => {
@@ -1361,10 +1408,16 @@ app.post('/profile/edit', ensureAuthenticated, (req, res) => {
 
 // Logout Handle
 app.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/login');
-});
+  res.render('logout')
+})
+app.post('/logout', (req, res, next) => {
+  req.logout(function (err) {
+    if(err) {
+      return next(err)
+    }
+    res.redirect('/')
+  })
+})
 
 app.listen(3000, () => {
     console.log('App Is Running On Port 3000')

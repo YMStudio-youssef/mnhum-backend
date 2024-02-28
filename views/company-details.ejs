@@ -1,6 +1,6 @@
 <%- include('./partials/navbar') %>
-    <title>Company Details</title>
-    <link rel="stylesheet" href="/css/details.css">
+<title>Company Details</title>
+<link rel="stylesheet" href="/css/details.css">
 <main>
     <div class="container">
         <h4 class="location">الرئيسية / <span><%= company.arabicName %> <%= company.englishName %></span></h4>
@@ -25,6 +25,14 @@
                     <p class="descInfo">
                         <%= company.desc %>
                     </p>
+                    <div class="sideInfo">
+                        <h2>معلومات جانبية</h2>
+                        <% Object.keys(company).forEach(key => {
+                            if (!key.startsWith('$') && key !== '_doc') { %>
+                                <h4><%= key %>: <%= company[key] %></h4>
+                        <%  }
+                        }); %>
+                    </div>
                 </div>
             </div>
             <div class="more">

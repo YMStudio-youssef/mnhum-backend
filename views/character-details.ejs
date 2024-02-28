@@ -1,6 +1,6 @@
 <%- include('./partials/navbar') %>
-    <title>Character Details</title>
-    <link rel="stylesheet" href="/css/details.css">
+<title>Character Details</title>
+<link rel="stylesheet" href="/css/details.css">
 <main>
     <div class="container">
         <h4 class="location">الرئيسية / <span><%= character.firstName %> <%= character.lastName %></span></h4>
@@ -28,6 +28,12 @@
                         <h4>تاريخ الميلاد: <%= character.birthday %></h4>
                         <h4>تاريخ الوفاة: <%= character.dieday %></h4>
                         <h4>الفترة التاريخية: <%= character.historicalPeriod %></h4>
+                        
+                        <% Object.keys(character).forEach(key => {
+                            if (!key.startsWith('$') && key !== '_doc') { %>
+                                <h4><%= key %>: <%= character[key] %></h4>
+                        <%  }
+                        }); %>
                     </div>
                 </div>
             </div>
