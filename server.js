@@ -66,7 +66,12 @@ function checkFileType(file, cb) {
 require('./config/passport')(passport);
 
 // Connecting To MongoDB Server
-mongoose.connect('mongodb+srv://youssef:Mada@3030@mnhum.rguk68a.mongodb.net/?retryWrites=true&w=majority&mnhum-backend=MnHum', { useNewUrlParser: true, useUnifiedTopology: true })
+const password = 'Mada@3030';
+const encodedPassword = encodeURIComponent(password);
+
+const connectionString = `mongodb+srv://youssef:${encodedPassword}@mnhum.rguk68a.mongodb.net/?retryWrites=true&w=majority&appName=MnHum`;
+
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
   console.log('Connected to MongoDB');
 })
