@@ -1,17 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catgs</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <% catgs.forEach((catg) => { %> 
-            <%= catg.title %>
-            <a href="/catgs/<%= catg._id %>">Show More</a>
-        <% }) %>
-    </div>
-</body>
-</html>
+<%- include('./partials/navbar') %>
+<title>التصنيفات</title>
+<link rel="stylesheet" href="/css/catgs.css">
+    <!-- Main Start -->
+    <main>
+        <div class="container">
+            <section class="catgs">
+                <h3 class="title">التصنيفات</h3>
+                <h4 class="small-title">الرئيسية / <span>التصنيفات</span></h4>
+                <div class="catgs-box">
+                    <% catgs.forEach((catg) => { %>                        
+                        <div class="catg">
+                            <a href="/catgs/<%= catg._id %>">
+                                <div class="image">
+                                    <img src="data:image/jpeg;base64, <%= catg.image %>" alt="Uploaded Image" style="height: 180px;">
+                                </div>
+                            </a>
+                            <div class="info">
+                                <h3><%= catg.title %></h3>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Main End -->
+
+<%- include('./partials/footer') %>

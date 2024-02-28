@@ -1,0 +1,60 @@
+/* Main Start */
+/*/ Catgs Start /*/
+.catgs .title{
+    text-align: center;
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+.catgs .small-title{
+    text-align: center;
+}
+.catgs .small-title span{
+    color: rgb(64,140,221);
+}
+.catgs .catgs-box{
+    margin-top: 20px;
+    /* padding: 20px; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+.catgs .catgs-box .catg{
+    cursor: pointer;
+    background-color: white;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+.catgs .catgs-box .catg .image img{
+    border-radius: 20px;
+    width: 100%;
+    padding: 10px;
+}
+.catgs .catgs-box .catg .info{
+    text-align: center;
+    padding: 10px;
+}
+.catgs .catgs-box .catg:hover{
+    box-shadow: 1px 1px 5px black;
+}
+.control{
+    text-align: center;
+    margin: 20px 0;
+}
+.before, .after{
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+}
+.control button span{
+    margin: 0 5px;
+}
+.before{
+    background-color: rgb(97, 161, 254);
+}
+.after{
+    background-color: rgb(64,140,221);
+}

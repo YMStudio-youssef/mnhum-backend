@@ -1,22 +1,23 @@
 <%- include('./partials/navbar') %>
-<title>الشركات</title>
+<title>الشخصيات</title>
 <link rel="stylesheet" href="/css/catgs.css">
     <!-- Main Start -->
     <main>
         <div class="container">
             <section class="catgs">
-                <h3 class="title">الشركات</h3>
-                <h4 class="small-title">الرئيسية / <span>الشركات</span></h4>
+                <h3 class="title">الشخصيات</h3>
+                <h4 class="small-title">الرئيسية / <span>الشخصيات</span></h4>
                 <div class="catgs-box">
-                    <% companies.forEach((company) => { %>                        
+                    <% characters.forEach((character) => { %>                        
                         <div class="catg">
-                            <a href="/companies/<%= company._id %>">
+                            <a href="/characters/<%= character._id %>">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
                                 </div>
                             </a>
                             <div class="info">
-                                <h3><%= company.arabicName %></h3>
+                                <h3><%= character.firstName %></h3>
+                                <p class="char-bio"><%= character.desc.substring(0, 30) %>...</p>
                             </div>
                         </div>
                     <% }) %>

@@ -1,0 +1,102 @@
+<%- include('../partials/navbar') %>
+    <title>اضافة شخصية</title>
+    <link rel="stylesheet" href="/css/add-character.css">
+    <!-- Main Start -->
+        <main>
+            <div class="container">
+                <section class="content">
+                    <h3 class="small-title">الرئيسية / <span>اضافة شخصية</span></h3>
+                    <div class="main-content">
+                        <div class="right">
+                            <div class="tabs">
+                            <ul>
+                                <li class="tab-button" data-tab="tab1"><i class="fa-regular fa-address-card"></i> المعلومات العامة</li>
+                                <!-- <li class="tab-button" data-tab="tab2"><i class="fa-solid fa-bars"></i> المحتوى</li> -->
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="tab1 tab-content" id="tab1">
+                            <form action="/addCharacter" method="post" enctype="multipart/form-data" novalidate>
+                                <div class="profile-image">
+                                    <div class="info">
+                                        <h2>صورة شخصية</h2>
+                                        <!-- <p>هذه هي الصورة الشخصية الخاصة بك</p> -->
+                                        <input type="file" name="image" id="">
+                                    </div>
+                                </div>
+                                <div class="info-add">
+                                    <h2 class="title">معلومات عامة</h2>
+                                    <div class="input-group">
+                                        <div class="input-row">
+                                            <label for="arab-name">الاسم الاول </label>
+                                            <input type="text" id="arab-name" name="firstName">
+                                        </div>
+                                        <div class="input-row">
+                                            <label for="engl-name">الاسم الثاني </label>
+                                            <input type="text" id="engl-name" name="lastName">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-row">
+                                            <label for="birthday">تاريخ الميلاد</label>
+                                            <br>
+                                            <input type="date" id="birthday" class="full-input" name="birthday">
+                                        </div>
+                                        <div class="input-row">
+                                            <label for="dieday">تاريخ الوفاة</label>
+                                            <br>
+                                            <input type="date" id="dieday" class="full-input" name="dieday">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="wrapper">
+                                        <label class="title">الجنس</label>
+                                        <input type="radio" name="type" id="option-1" checked value="ذكر">
+                                        <label for="option-1" class="option option-1"><span>ذكر</span></label>
+                                        <input type="radio" name="type" id="option-2" value="انثى">
+                                        <label for="option-2" class="option option-2"><span>انثى</span></label>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="input-row">
+                                            <label for="country">الجنسية</label>
+                                            <select id="country" name="nationality">
+                                                <option value="">اختر البلد</option>
+                                                <% countries.forEach((country) => { %>
+                                                    <option value="<%= country.title %>"><%= country.title %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="input-row">
+                                            <label for="nickname">اللقب </label>
+                                            <input type="text" id="nickname" name="nickname">
+                                        </div>
+                                    </div>
+                                    <label for="job">المهنة الحالية</label>
+                                    <input type="text" class="full-input" name="job">
+                                    <label for="historical-period">الفترة التاريخية</label>
+                                    <input type="date" name="histperiod" id="historical-period" class="full-input">
+                                    <div class="input-row">
+                                        <label for="catg">التصنيف</label>
+                                        <select name="catg" id="catg" class="full-input">
+                                            <option value="">اختر التصنيف</option>
+                                            <% catgs.forEach((catg) => { %>
+                                                <option value="<%= catg.title %>"><%= catg.title %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="info-add">
+                                        <label for="info">معلومات عن الشخصية</label>
+                                        <br>
+                                        <textarea id="info" name="info" cols="30" rows="10"></textarea>
+                                        <br>
+                                    </div>
+                                    <button>حفظ وانهاء البيانات</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+<%- include('../partials/footer') %>

@@ -1,0 +1,108 @@
+<%- include('../partials/navbar') %>
+    <title>اضافة الشركة</title>
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <link rel="stylesheet" href="/css/add-company.css">
+    <!-- Main Start -->
+    <main>
+        <div class="container">
+            <section class="content">
+                <h3 class="small-title">الرئيسية / <span>اضافة شخصية</span></h3>
+                <div class="main-content">
+                    <div class="right">
+                        <div class="tabs">
+                        <ul>
+                            <li class="tab-button" data-tab="tab1"><i class="fa-regular fa-address-card"></i> المعلومات العامة</li>
+                            <!-- <li class="tab-button" data-tab="tab2"><i class="fa-solid fa-bars"></i> المحتوى</li> -->
+                        </ul>
+                        </div>
+                    </div>
+                    <div class="tab1 tab-content" id="tab1">
+                        <div class="info-add">
+                            <h2 class="title">معلومات المؤسسة</h2>
+                            <form action="/addCompany" method="post" enctype="multipart/form-data" novalidate>
+                                <div class="profile-image">
+                                    <div class="info">
+                                        <h2>صورة شخصية</h2>
+                                        <!-- <p>هذه هي الصورة الشخصية الخاصة بك</p> -->
+                                        <input type="file" name="image">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-row">
+                                        <label for="arab-name">الاسم باللغة العربية</label>
+                                        <input type="text" id="arab-name" name="arabname">
+                                    </div>
+                                    <div class="input-row">
+                                        <label for="engl-name">الاسم باللغة الانجليزية</label>
+                                        <input type="text" id="engl-name" name="englname">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-row">
+                                        <label for="country">الدولة</label>
+                                        <select id="country" name="country">
+                                            <option value="">اختر البلد</option>
+                                            <% countries.forEach((country) => { %>
+                                                <option value="<%= country.title %>"><%= country.title %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="input-row">
+                                        <label for="main-comp">الفرع الرئيسي</label>
+                                        <input type="text" id="main-comp" name="mainbranch">
+                                    </div>
+                                </div>
+                                <br>
+                                <label for="catg">التصنيف</label>
+                                <select id="catg" class="full-input" name="catg">
+                                    <option value="">اختر التصنيف</option>
+                                    <% catgs.forEach((catg) => { %>
+                                        <option value="<%= catg.title %>"><%= catg.title %></option>
+                                    <% }) %>
+                                </select>
+                                <h2 class="title">معلومات التواصل</h2>
+                                <div class="input-group">
+                                    <div class="input-row">
+                                        <label for="phone">رقم الهاتف</label>
+                                        <input type="text" id="phone" name="phonenumber">
+                                    </div>
+                                    <div class="input-row">
+                                        <select id="number" name="code">
+                                            <option value="">الرمز الدولي</option>
+                                            <option value="+966">+966</option>
+                                            <option value="+971">+971</option>
+                                            <option value="+973">+973</option>
+                                            <option value="+968">+968</option>
+                                            <option value="+979">+979</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-row">
+                                        <label for="website">الموقع الالكتروني</label>
+                                        <input type="text" id="website" name="website">
+                                    </div>
+                                    <div class="input-row">
+                                        <label for="network-location">عنوان الشبكة</label>
+                                        <input type="text" id="network-location" name="internetlocation">
+                                    </div>
+                                </div>
+                                <label for="email">البريد الالكتروني</label>
+                                <input type="text" class="full-input" id="email" name="email">
+                                <div class="info-add">
+                                    <label for="info">معلومات عن الشركة</label>
+                                    <br>
+                                    <textarea id="info" cols="30" rows="10" name="info"></textarea>
+                                    <br>
+                                </div>
+                                <button type="submit">حفظ وانهاء البيانات</button> 
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Main End -->
+
+<%- include('../partials/footer') %>

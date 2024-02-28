@@ -1,19 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%- include('./partials/navbar') %>
     <title>Character Details</title>
-</head>
-<body>
-    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image">
-    <h1><%= character.arabicName %></h1>
-    <h1><%= character.englishName %></h1>
-    <p><%= character.desc %></p>
-    <p><%= character.nationality %></p>
-    <p><%= character.residence %></p>
-    <p><%= character.birthday %></p>
-    <p><%= character.catg %></p>
-    <p><%= character.job %></p>
-</body>
-</html>
+    <link rel="stylesheet" href="/css/details.css">
+<main>
+    <div class="container">
+        <h4 class="location">الرئيسية / <span><%= character.firstName %> <%= character.lastName %></span></h4>
+        <section class="content" id="content"> 
+            <div class="info">
+                <div class="top">
+                    <div class="image">
+                        <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="width: 100%;">
+                    </div>
+                    <div class="text">
+                        <h2 class="characterName">من هو؟ <%= character.firstName %> - <%= character.lastName %></h2>
+                        <h4 class="nick"><%= character.nickName %></h4>
+                        <h4>الجنس: <%= character.type %></h4>
+                        <h4>الجنسية: <%= character.nationality %></h4>
+                        <h4>المهنة الحالية: <%= character.job %></h4>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <h2 class="characterName">من هو؟ <%= character.firstName %> - <%= character.lastName %></h2>
+                    <div class="descInfo">
+                        <%= character.desc %>
+                    </div>
+                    <div class="side-info">
+                        <h2>معلومات جانبية</h2>
+                        <h4>تاريخ الميلاد: <%= character.birthday %></h4>
+                        <h4>تاريخ الوفاة: <%= character.dieday %></h4>
+                        <h4>الفترة التاريخية: <%= character.historicalPeriod %></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="more">
+                <div class="characters-box">
+                    <% sameCharacters.forEach((character) => { %>
+                        <a href="/character/<%= character._id %>">
+                            <div class="character">
+                                <div class="image">
+                                    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                </div>
+                                <div class="info">
+                                    <h3 class="char-name" style="color: black;"><%= character.firstName %> <%= character.lastName %></h3>
+                                    <p class="char-bio" style="color: rgb(145, 145, 145);"><%= character.desc.substring(0, 30) %>...</p>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<%- include('./partials/footer') %>

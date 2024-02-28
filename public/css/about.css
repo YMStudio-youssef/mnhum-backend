@@ -1,0 +1,20 @@
+
+/* Content Start */
+.content {
+    margin: 20px 0;
+}
+.content .heading{
+    text-align: right;
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+.content p{
+    font-size: 14px;
+}
+.content .question{
+    font-size: 16px !important;
+    margin: 10px 0;
+
+}
+/* Content End */

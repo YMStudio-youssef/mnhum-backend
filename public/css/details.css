@@ -1,0 +1,90 @@
+h4.location{
+    margin: 20px 0;
+}
+h4.location span{
+    color: rgb(65, 105, 227);
+}
+#content{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.content .info{
+    width: 69%;
+}
+.content .more{
+    width: 29%;
+}
+.content .info .top{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+} 
+.content .info .top .image img{
+    width: 220px !important;
+    height: 260px;
+    border-radius: 20px;
+}
+.content .info .top .characterName{
+    margin-bottom: 5px;
+}
+.content .info .top h4{
+    font-size: 13px;
+}
+.content .info .top h4:not(:first-of-type){
+    line-height: 30px;
+    font-size: 15px;
+}
+.content .info .top .nick{
+    color: rgb(79, 79, 79);
+}
+.content .info .bottom{
+    margin: 20px 0;
+    line-height: 30px;
+}
+.content .info .bottom .characterName{
+    color: rgb(32, 33, 31);
+    padding: 10px;
+    margin: 10px 0;
+    background-color: rgb(236, 249, 254);
+    border-right: 4px solid rgb(66, 183, 226);
+}
+
+
+.content .more .characters-box .character{
+    cursor: pointer;
+    background-color: white;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: flex;
+    margin: 30px 0;
+    align-items: center;
+}
+.content .more .characters-box .character:hover{
+    box-shadow: 1px 1px 5px black;
+}
+.content .more .characters-box .character .image img{
+    border-radius: 20px;
+    width: 150px;
+    padding: 10px;
+}
+
+@media (max-width: 1018px){
+    .content .info{
+        width: 100%;
+    }
+    .content .more{
+        width: 100%;
+    }
+    .content .more .characters-box{
+        display: grid !important; 
+        grid-template-columns: repeat(auto-fill, minmax(49%, 1fr));
+        gap: 10px;
+    }
+    .content .more .characters-box .character{
+        margin-bottom: 0;
+    }
+    .content .more .characters-box .character:last-child{
+        margin-bottom: 30px;
+    }
+}

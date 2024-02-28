@@ -1,0 +1,52 @@
+<footer style="background-color: <%= Footer.value %>;">
+    <div class="container">
+        <section class="footer">
+            <div class="info">
+                <div class="logo">
+                    <img src="images/logo.png" alt="">
+                    <% texts.forEach((text) => { %>
+                        <% if(text.name == 'Footer1'){%>
+                            <h3><%= text.value %></h3>
+                        <% }else if(text.name == 'Footer2'){ %>
+                            <h3><%= text.value %></h3>
+                        <% } %>        
+                    <% }) %>
+                    <div class="social">
+                        <h4>تابعنا على</h4>
+                        <ul>
+                            <li><i class="fa-brands fa-facebook"></i></li>
+                            <li><i class="fa-brands fa-youtube"></i></li>
+                            <li><i class="fa-brands fa-twitter"></i></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="links">
+                <div class="col">
+                    <h4>حول من هم</h4>
+                    <ul>
+                        <li><a href="/catgs">التصنيفات</a></li>
+                        <li><a href="/about">عن من هم</a></li>
+                        <li><a href="/privacy">سياسية الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h4>مواقغ اخرى من مجرة</h4>
+                    <ul>
+                        <li><a href="">هارفارد بيزنس ريفيو</a></li>
+                        <li><a href="">فورتشن 500 العربية</a></li>
+                        <li><a href="">اي ام تي</a></li>
+                        <li><a href="">نفسيتي</a></li>
+                        <li><a href="">فورتشن العربية</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/main.js"></script>
+</body>
+</html>

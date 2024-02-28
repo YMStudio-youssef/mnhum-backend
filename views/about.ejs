@@ -1,0 +1,17 @@
+<%- include('./partials/navbar') %>
+    <title>MnHum | About</title>   
+    <!-- Main Start -->
+    <main>
+        <div class="container">
+            <section class="content">
+                <h2 class="heading">عن من هم</h2>
+                <% texts.forEach((text) => { %>
+                    <% if(text.name == 'About'){%>
+                        <p><%= text.value %></p>
+                    <% } %>
+                <% }) %>
+            </section>
+        </div>
+    </main>
+    <!-- Main End -->
+<%- include('./partials/footer') %>

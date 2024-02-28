@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all .3s ease-in-out;
+    font-family: "Rubik", sans-serif;
+    text-decoration: none;
+    list-style: none;
+}
+
+body{
+    background-color: rgb(254, 254, 254);
+}
+
+.heading{
+    text-align: center;
+    margin: 35px 0;
+    font-size: 26px;
+    color: rgb(33, 37, 41);
+    letter-spacing: 1.1px;
+}
+
+.btn{
+    background-color: rgb(65, 105, 227);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.search-box form{
+    width: 90%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 1px 1px 10px rgb(255, 255, 255);
+}
+
+.search-box .right{
+    align-items: center;
+    display: flex;
+    width: 90%;
+}
+.search-box i{
+    color: rgb(74, 127, 166);
+    font-size: 20px;
+}
+.search-box input{
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    font-weight: 600;
+    color: rgb(74, 127, 166);
+}
+.search-box input:focus{
+    border: none;
+}
+
+.search-box .left button{
+    padding: 15px;
+    border-radius: 40px;
+    border: none;
+    color: rgb(130, 130, 130);
+    cursor: pointer;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Default Reset Code Start */
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* Default Reset Code End */
+
+header{
+    background-color: rgb(255, 255, 255);
+}
+header nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+header nav .logo-container img{
+    width: 90px;
+}
+header nav ul{
+    display: flex;
+    align-items: center;
+}
+header nav ul li{
+    margin: 10px;
+}
+header nav ul li a, .responsive-menu ul li a{
+    font-size: 14px;
+    color: black;
+}
+header nav ul li a:hover, .responsive-menu ul li a:hover{
+    color: rgb(65, 105, 227);
+}
+header nav ul li a.active, .responsive-menu ul li a.active{
+    color: rgb(65, 105, 227);
+}
+header nav ul li button, header .responsive-menu button{
+    border: none;
+    background-color: rgb(65, 105, 227);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+}
+header nav ul li button i, header .responsive-menu li button i{
+    font-size: 14px;
+    margin-left: 4px;
+}
+header nav ul li select{
+    padding: 15px;
+    border: none;
+}
+
+/* Responsive Menu Code */
+header nav ul .menu{
+    font-size: 24px;
+    display: none;
+    cursor: pointer;
+}
+header .responsive-menu{
+    display: none;
+}
+header .responsive-menu ul li{
+    margin: 5px 0;
+    padding: 5px;
+}
+header .responsive-menu button{
+    width: 100%;
+    justify-content: center;
+}
+@media (max-width: 768px){
+    header nav ul:first-of-type{
+        display: none;
+    }
+    header nav ul li.login-btn{
+        display: none;
+    }
+    header nav ul .menu {
+        display: block;
+    }
+}
+
+/* Footer Start */
+footer{
+    background-color: rgb(248, 249, 250);
+    padding: 20px 0;
+}
+footer .footer{
+    display: flex;
+    flex-wrap: wrap;
+}
+.footer .info, .footer .links{
+    width: 45%;
+}
+.footer .links .col{
+    width: 45%;
+}
+.footer .info .logo img{
+    width: 150px;
+}
+.footer .info h3{
+    font-size: 16px;
+    line-height: 30px;
+    color: rgb(79, 79, 79);
+}
+.footer .info .social{
+    display: flex;
+    align-items: center;
+}
+.footer .info .social h4{
+    font-size: 18px;
+}
+.footer .info .social ul{
+    display: flex;
+    align-items: center;
+}
+.footer .info .social ul li{
+    margin: 8px;
+}
+.footer .info .social ul li i{
+    font-size: 22px;
+    color: rgb(81, 81, 82);
+}
+.footer .links{
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+}
+.footer .links .col h4{
+    font-size: 16px;
+}
+.footer .links .col ul li{
+    margin: 14px 5px;
+}
+.footer .links .col ul li a{
+    color: rgb(130, 130, 130);
+    font-weight: 700;
+}
+@media (max-width: 768px) {
+  .footer{
+    flex-direction: column;
+    /* text-align: center; */
+    width: 100%;
+  }
+  .footer .info, .footer .links{
+    width: 100%;
+  }
+
+  .footer .info .logo img {
+    width: 100px;
+  }
+
+  .footer .info h3 {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .footer .info .social h4 {
+    font-size: 16px;
+  }
+
+  .footer .info .social ul li {
+    margin: 4px;
+  }
+
+  .footer .info .social ul li i {
+    font-size: 18px;
+  }
+
+  .footer .links .col ul li {
+    margin: 8px 5px;
+  }
+
+  .footer .links .col h4 {
+    font-size: 14px;
+  }
+}
+
+/* Heading Code */
+/*/ Main | Header Start /*/
+.header{
+    width: 100%;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 40px;
+    text-align: center;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.header h1{
+    font-size: 36px;
+}
+.header h2{
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+.header .trends{
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.header .trends button{
+    background-color: rgb(127, 167, 197);
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+.header .trends button:last-child{
+    background-color: white;
+    color: black;
+}
+@media (max-width: 900px){
+    .header h1{
+        font-size: 28px;
+    }
+    .header h2{
+        font-size: 22px;
+    }
+    .header .search-box{
+        padding: 10px;
+    }
+}
+@media (max-width: 550px){
+    .header h1{
+        font-size: 24px;
+    }
+    .header h2{
+        font-size: 18px;
+    }
+}
+
+/* Responsive Container Code */
+
+@media (max-width: 575.98px) {  }
+
+@media (min-width: 576px) and (max-width: 767.98px) {  }
+
+@media (min-width: 768px) and (max-width: 991.98px) {  }
+
+@media (min-width: 992px) and (max-width: 1199.98px) {  }
+
+@media (min-width: 1200px) {  }

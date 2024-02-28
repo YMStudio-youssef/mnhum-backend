@@ -1,0 +1,65 @@
+<%- include('./partials/navbar') %>
+    <title>تعديل الملف الشخصي</title>
+    <link rel="stylesheet" href="/css/add-character.css">
+    <style>
+      .tab1 form input{
+        margin: 10px;
+        margin-right: 0 !important;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+      }
+      .tab1 form button{
+        width: 100%;
+      }
+      .tab1 a, .tab1 form button{
+        padding: 10px;
+        cursor: pointer;
+        color: white;
+        border-radius: 10px;
+        display: inline-block;
+        border: none;
+        margin: 5px 0;
+      }
+    </style>
+    <!-- Main Start -->
+        <main>
+            <div class="container">
+                <section class="content">
+                    <h3 class="small-title">الرئيسية / <span>تعديل الملف الشخصي</span></h3>
+                    <div class="main-content">
+                        <div class="right">
+                            <div class="tabs">
+                            <ul>
+                                <li class="tab-button" data-tab="tab1"><i class="fa-regular fa-address-card"></i>تعديل معلومات المستخدم</li>
+                                <!-- <li class="tab-button" data-tab="tab2"><i class="fa-solid fa-bars"></i> المحتوى</li> -->
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="tab1 tab-content" id="tab1">
+                          <h1>Edit Profile</h1>
+                          <% if (success_msg) { %>
+                            <div>
+                              <p><%= success_msg %></p>
+                            </div>
+                          <% } %>
+                          <% if (error_msg) { %>
+                            <div>
+                              <p><%= error_msg %></p>
+                            </div>
+                          <% } %>
+
+                          <form action="/profile/edit" method="POST" enctype="multipart/form-data">
+                            <input type="text" name="name" placeholder="Name" value="<%= user.name %>">
+                            <input type="file" name="image">
+                            <button type="submit" style="background-color: <%= btnColor.value %>;">Save</button>
+                          </form>
+                          <p><a href="/profile" style="background-color: <%= btnColor.value %>;">Go Back</a></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+<%- include('./partials/footer') %>

@@ -1,0 +1,63 @@
+<%- include('./partials/navbar') %>
+    <title>الملف الشخصي</title>
+    <link rel="stylesheet" href="/css/add-character.css">
+    <!-- Main Start -->
+    <style>
+        .tab1 .profile{
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .tab1 .profile .image img{
+            width: 60px;
+            height: 60px;
+        }
+        .tab1 .controls{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .tab1 .controls a{
+            padding: 10px;
+            display: inline-block;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+        <main>
+            <div class="container">
+                <section class="content">
+                    <h3 class="small-title">الرئيسية / <span>الملف الشخصي</span></h3>
+                    <div class="main-content">
+                        <div class="right">
+                            <div class="tabs">
+                            <ul>
+                                <li class="tab-button" data-tab="tab1"><i class="fa-regular fa-address-card"></i> معلومات المستخدم</li>
+                                <!-- <li class="tab-button" data-tab="tab2"><i class="fa-solid fa-bars"></i> المحتوى</li> -->
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="tab1 tab-content" id="tab1">
+                          <h1>اهلا, <%= user.name %></h1>
+                          <div class="profile">
+                              <div class="image">
+                                  <img src="/uploads/<%= user.image %>" alt="Profile Image">
+                              </div>
+                              <div class="info">
+                                  <p>الاسم: <%= user.name %></p>
+                                  <br>
+                                  <p>الايميل: <%= user.email %></p>
+                              </div>
+                          </div>
+                          <div class="controls">
+                            <p><a href="/profile/edit" style="background-color: <%= btnColor.value %>">Edit Profile</a></p>
+                            <p><a href="/logout" style="background-color: red;">Logout</a></p>
+                          </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+<%- include('./partials/footer') %>

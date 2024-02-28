@@ -1,17 +1,11 @@
 <%- include('partials/navbar') %>
     <link rel="stylesheet" href="css/style.css">
-    <title>من هم</title>
+    <title><%= tag.title %></title>
     <main>
         <div class="container">
-            <!-- <section class="header" style="background: linear-gradient(90deg, <%= headingColor1.value %> 0%, <%= headingColor2.value %> 45%, <%= headingColor3.value %> 100%) !important">
+            <section class="header">
                 <div class="content">
-                    <% texts.forEach((text) => { %>
-                        <% if(text.name == 'Header-Heading1'){%>
-                            <h1><%= text.value %></h1>
-                        <% }else{ %>
-                            <h1>no heading</h1>
-                        <% } %>
-                    <% }) %>
+                    <h1>من هم؟ اكبر قاعدة بيانات للشخصيات والمؤسسات العربية</h1>
                     <h2>ابحث ضمن 150483 شخصية ومؤسسة</h2>
                     <div class="search-box">
                         <form action="/search" method="post" novalidate>
@@ -25,20 +19,32 @@
                         </form>
                     </div>
                     <div class="trends">
-                        <% tags.forEach((tag) => { %>
-                            <button>
-                                <a href="/tags/<%= tag._id %>" style="color: white;">
-                                    <i class="fa-solid fa-arrow-trend-up"></i>
-                                    <%= tag.title %>
-                                </a>
-                            </button>
-                        <% }) %>
+                        <button>
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            مؤسسات اعلانية
+                        </button>
+                        <button>
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            ضيوف ثمانية 
+                        </button>
+                        <button>
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            رؤساء تنفيذيون
+                        </button>
+                        <button>
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            مصارف 
+                        </button>
+                        <button>
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            رؤساء الشركات العربية
+                        </button>
                         <button>تصفح الكل</button>
                     </div>
                 </div>
-            </section> -->
+            </section>
             <section class="trends-characters">
-                <h2 class="heading">الشخصيات الاكثر زيارة الان</h2>
+                <h2 class="heading">الشخصيات الموجودة</h2>
                 <div class="characters-box">
                     <% characters.forEach((character) => { %>
                         <a href="/character/<%= character._id %>">
@@ -54,14 +60,12 @@
                         </a>
                     <% }) %>
                 </div>
-                <br>
-                <br>
                 <center>
-                    <a href="/characters" class="btn" style="background-color: <%= btnColor.value %>">عرض الكل</a>
+                    <button class="btn">تصفح المزيد</button>
                 </center>
             </section>
             <section class="trends-companys">
-                <h2 class="heading">المؤسسات الاكثر زيارة الان</h2>
+                <h2 class="heading">المؤسسات الموجودة  </h2>
                 <div class="companys-box">
                     <% companies.forEach((company) => { %> 
                         <a href="/company/<%= company._id %>">
@@ -76,37 +80,9 @@
                         </a> 
                     <% }) %>
                 </div>
-                <br>
-                <br>
                 <center>
-                    <a href="/companies" class="btn" style="background-color: <%= btnColor.value %>">عرض الكل</a>
+                    <button class="btn">عرض الكل</button>
                 </center>
-            </section>
-            <section class="catgs-choosen">
-                <h2 class="heading">التصنيفات المختارة</h2>
-                <div class="catgs-box">
-                    <% catgs.forEach((catg) => { %>
-                        <a href="/catgs/<%= catg._id %>">                        
-                            <div class="catg">
-                                <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= catg.image %>" alt="Uploaded Image" style="height: 180px;">
-                                </div>
-                                <div class="info">
-                                    <h3 class="catg-title" style="color: black;">
-                                        <%= catg.title %>
-                                    </h3>
-                                </div>
-                            </div>
-                        </a>
-                    <% }) %>
-                </div>
-                <br>
-                <br>    
-                <center>
-                    <a href="/catgs" class="btn" style="background-color: <%= btnColor.value %>">عرض الكل</a>
-                </center>
-                <br>
-                <br>
             </section>
         </div>
     </main>
