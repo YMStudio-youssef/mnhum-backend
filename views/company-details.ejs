@@ -27,11 +27,23 @@
                     </p>
                     <div class="sideInfo">
                         <h2>معلومات جانبية</h2>
-                        <% Object.keys(company).forEach(key => {
-                            if (!key.startsWith('$') && key !== '_doc') { %>
-                                <h4><%= key %>: <%= company[key] %></h4>
-                        <%  }
-                        }); %>
+                        <% if (company.data.length > 0) { %>
+                            <% company.data.forEach((document) => { %>
+                              <h4><%= document.fieldName %> <%= document.fieldValue %></h4>
+                            <% }); %>
+                        <% } %>
+                        <% if (isAuthenticated && createdByMatch) { %>
+                            <h4>Insert New Field And Value</h4>
+                            <form action="/companyInsert" method="post" novalidate>
+                              <label for="fieldName">Name: </label>
+                              <input type="text" placeholder="Field Name" id="fieldName" name="fieldName">
+                              <br>
+                              <label for="fieldValue">Value: </label>
+                              <input type="text" placeholder="Field Value" id="fieldValue" name="fieldValue">
+                              <input type="hidden" name="companyId" value="<%= company._id %>">
+                              <button type="submit">Insert</button>
+                            </form>
+                        <% } %>
                     </div>
                 </div>
             </div>

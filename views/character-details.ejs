@@ -25,15 +25,26 @@
                     </div>
                     <div class="side-info">
                         <h2>معلومات جانبية</h2>
-                        <h4>تاريخ الميلاد: <%= character.birthday %></h4>
-                        <h4>تاريخ الوفاة: <%= character.dieday %></h4>
-                        <h4>الفترة التاريخية: <%= character.historicalPeriod %></h4>
-                        
-                        <% Object.keys(character).forEach(key => {
-                            if (!key.startsWith('$') && key !== '_doc') { %>
-                                <h4><%= key %>: <%= character[key] %></h4>
-                        <%  }
-                        }); %>
+                        <h4>تاريخ الميلاد <%= character.birthday %></h4>
+                        <h4>تاريخ الوفاة <%= character.dieday %></h4>
+                        <h4>الفترة التاريخية <%= character.historicalPeriod %></h4>
+                        <% if (character.data.length > 0) { %>
+                            <% character.data.forEach((document) => { %>
+                              <h4><%= document.fieldName %> <%= document.fieldValue %></h4>
+                            <% }); %>
+                        <% } %>
+                        <% if (isAuthenticated && createdByMatch) { %>
+                            <h4>Insert New Field And Value</h4>
+                            <form action="/charInsert" method="post" novalidate>
+                              <label for="fieldName">Name: </label>
+                              <input type="text" placeholder="Field Name" id="fieldName" name="fieldName">
+                              <br>
+                              <label for="fieldValue">Value: </label>
+                              <input type="text" placeholder="Field Value" id="fieldValue" name="fieldValue">
+                              <input type="hidden" name="characterId" value="<%= character._id %>">
+                              <button type="submit">Insert</button>
+                            </form>
+                          <% } %>
                     </div>
                 </div>
             </div>

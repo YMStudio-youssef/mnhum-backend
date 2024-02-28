@@ -96,6 +96,17 @@ const characterSchema = new mongoose.Schema({
     visits: {
         type: Number,
         default: 0
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    data: {
+      type: [{
+        fieldName: String,
+        fieldValue: String
+      }],
+      default: []
     }
 }, {strict: false})
 
@@ -115,6 +126,17 @@ const companySchema = new mongoose.Schema({
     visits: {
         type: Number,
         default: 0
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    data: {
+      type: [{
+        fieldName: String,
+        fieldValue: String
+      }],
+      default: []
     }
 }, {strict: false})
 
@@ -226,72 +248,162 @@ app.get('/addcharacter', ensureAuthenticated, async (req, res) => {
     res.render('admin/addcharacter', {DocumentsCount, Footer, catgs, tags, user: req.user, countries: countries, texts, btnColor, headingColor1, headingColor2, headingColor3, fieldsCount})
 })
 
-app.get('/character/:id', async (req, res) => {
-    const characterId = req.params.id;
-    const Footer = await Color.findOne({name: 'Footer'})
-    const btnColor = await Color.findOne({ name: 'btn-color' });
-    const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
-    const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
-    const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
-    const texts = await Text.find({});
-    const tags = await Tag.find({});
-    const characterCount = await Character.countDocuments()
-    const companyCount = await Company.countDocuments()
-    const DocumentsCount = characterCount + companyCount
+app.get('/character/:id', async (req, res, next) => {
+  const characterId = req.params.id;
+  const Footer = await Color.findOne({ name: 'Footer' });
+  const btnColor = await Color.findOne({ name: 'btn-color' });
+  const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
+  const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
+  const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
+  const texts = await Text.find({});
+  const tags = await Tag.find({});
+  const characterCount = await Character.countDocuments();
+  const companyCount = await Company.countDocuments();
+  const DocumentsCount = characterCount + companyCount;
+  const isAuthenticated = req.isAuthenticated();
 
-    await Character.findById(characterId)
-        .then(async (character) => {
-            if (!character) {
-                return res.status(404).send('Character not found');
-            }
+  try {
+    const character = await Character.findById(characterId);
 
-            // Increment the visits count
-            character.visits += 1;
-            await character.save();
+    if (!character) {
+      return res.status(404).send('Character not found');
+    }
 
-            // Find characters with the same category name excluding the current character
-            const sameCharacters = await Character.find({ catg: character.catg, _id: { $ne: character._id }})
-                .sort({ _id: -1 }) // Sort by descending _id to get the latest items first
-                .limit(3); // Limit the results to 3 items
+    // Check if the createdBy._id matches req.user._id
+    const createdByMatch = isAuthenticated && character.createdBy && character.createdBy._id.toString() === req.user._id.toString();
 
-            // Render character details
-            res.render('character-details', {
-                DocumentsCount,
-                character,
-                Footer,
-                btnColor,
-                headingColor1,
-                headingColor2,
-                headingColor3,
-                user: req.user,
-                texts,
-                tags,
-                sameCharacters
-            });
-        })
-        .catch((err) => {
-            console.error("Error: " + err);
-            res.status(500).send('Error occurred while retrieving character');
-        });
+    // Increment the visits count
+    character.visits += 1;
+    await character.save();
+
+    // Find characters with the same category name excluding the current character
+    const sameCharacters = await Character.find({ catg: character.catg, _id: { $ne: character._id } })
+      .sort({ _id: -1 }) // Sort by descending _id to get the latest items first
+      .limit(3); // Limit the results to 3 items
+
+    // Render character details with createdByMatch
+    res.render('character-details', {
+      DocumentsCount,
+      character,
+      Footer,
+      btnColor,
+      headingColor1,
+      headingColor2,
+      headingColor3,
+      user: req.user,
+      texts,
+      tags,
+      sameCharacters,
+      createdByMatch,
+      isAuthenticated
+    });
+  } catch (err) {
+    console.error('Error: ' + err);
+    res.status(500).send('Error occurred while retrieving character');
+  }
 });
 
-app.post('/characterCustom', async (req, res) => {
-  const catgs = await Catg.find()
-  const Footer = await Color.findOne({name: 'Footer'})
-  const countries = await Country.find()
-  const texts = await Text.find({})
-  const btnColor = await Color.findOne({name: 'btn-color'})
-  const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
-  const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
-  const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
-  const tags = await Tag.find()
-  const characterCount = await Character.countDocuments()
-  const companyCount = await Company.countDocuments()
-  const DocumentsCount = characterCount + companyCount
-  const fieldsCount = req.body.fieldsNumber
+app.post('/charInsert', async (req, res) => {
+  try {
+    const { characterId, fieldName, fieldValue } = req.body;
 
-  res.render('admin/addcharacter', {fieldsCount, DocumentsCount, Footer, catgs, tags, user: req.user, countries: countries, texts, btnColor, headingColor1, headingColor2, headingColor3})
-})
+    // Find the character by ID
+    const character = await Character.findById(characterId);
+
+    if (!character) {
+      return res.status(404).send('Character not found');
+    }
+
+    // Push the new field and value as an object into the data array
+    character.data.push({ fieldName, fieldValue });
+
+    // Save the updated character
+    await character.save();
+
+    res.redirect(`/character/${characterId}`);
+  } catch (err) {
+    console.error('Error occurred while inserting field and value:', err);
+    res.status(500).send('Error occurred while inserting field and value');
+  }
+});
+
+app.post('/companyInsert', async (req, res) => {
+  try {
+    const { companyId, fieldName, fieldValue } = req.body;
+
+    // Find the character by ID
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.status(404).send('company not found');
+    }
+
+    // Push the new field and value as an object into the data array
+    company.data.push({ fieldName, fieldValue });
+
+    // Save the updated character
+    await company.save();
+
+    res.redirect(`/company/${companyId}`);
+  } catch (err) {
+    console.error('Error occurred while inserting field and value:', err);
+    res.status(500).send('Error occurred while inserting field and value');
+  }
+});
+
+app.get('/company/:id', async (req, res) => {
+  const companyId = req.params.id;
+  const Footer = await Color.findOne({ name: 'Footer' });
+  const btnColor = await Color.findOne({ name: 'btn-color' });
+  const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
+  const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
+  const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
+  const texts = await Text.find({});
+  const tags = await Tag.find({});
+  const characterCount = await Character.countDocuments();
+  const companyCount = await Company.countDocuments();
+  const DocumentsCount = characterCount + companyCount;
+  const isAuthenticated = req.isAuthenticated();
+
+  try {
+    const company = await Company.findById(companyId);
+
+    if (!company || !company._id) {
+      return res.status(404).send('Company not found');
+    }
+
+    const createdByMatch = isAuthenticated && company.createdBy && company.createdBy._id.toString() === req.user._id.toString();
+
+    // Increment the visits count
+    company.visits += 1;
+    await company.save();
+
+    // Find companies with the same category name excluding the current company
+    const sameCompanies = await Company.find({ catg: company.catg, _id: { $ne: company._id } })
+      .sort({ _id: -1 }) // Sort by descending _id to get the latest items first
+      .limit(3); // Limit the results to 3 items
+
+    // Render company details
+    res.render('company-details', {
+      DocumentsCount,
+      company,
+      Footer,
+      btnColor,
+      headingColor1,
+      headingColor2,
+      headingColor3,
+      user: req.user,
+      texts,
+      tags,
+      sameCompanies,
+      isAuthenticated,
+      createdByMatch
+    });
+  } catch (err) {
+    console.error('Error: ' + err);
+    res.status(500).send('Error occurred while retrieving company');
+  }
+});
 
 app.post('/addCharacter', async (req, res) => {
   try {
@@ -300,7 +412,15 @@ app.post('/addCharacter', async (req, res) => {
     const data = fs.readFileSync(req.file.path);
     const imageBuffer = Buffer.from(data);
 
-    const characterData = {
+    // Assuming you have the user ID available in req.user.id
+    const userId = req.user.id;
+
+    // Find the user who created the character
+    const user = await User.findById(userId);
+    
+    console.log(user)
+
+    const character = new Character({
       image: imageBuffer.toString('base64'),
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -313,18 +433,8 @@ app.post('/addCharacter', async (req, res) => {
       desc: req.body.info,
       historicalPeriod: req.body.histperiod,
       catg: req.body.catg,
-    };
-
-    // Get the custom field names and values from the request body
-    const customFields = Object.keys(req.body).filter(key => key.startsWith('customName'));
-    customFields.forEach(field => {
-      const index = field.slice(10); // Extract the index from the field name
-      const fieldName = req.body[`customName${index}`];
-      const fieldValue = req.body[`customValue${index}`];
-      characterData[fieldName] = fieldValue;
+      createdBy: user
     });
-
-    const character = new Character(characterData);
 
     character.save()
       .then(() => {
@@ -359,73 +469,6 @@ app.get('/addcompany', ensureAuthenticated, async (req, res) => {
     res.render('admin/addCompany', {fieldsCount, DocumentsCount, Footer, countries, catgs, tags, user: req.user, texts, headingColor1, headingColor2, headingColor3, btnColor})
 })
 
-app.post('/companyCustom', async (req, res) => {
-  const catgs = await Catg.find()
-  const Footer = await Color.findOne({name: 'Footer'})
-  const texts = await Text.find({})
-  const btnColor = await Color.findOne({name: 'btn-color'})
-  const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
-  const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
-  const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
-  const tags = await Tag.find()
-  const countries = await Country.find({})
-  const characterCount = await Character.countDocuments()
-  const companyCount = await Company.countDocuments()
-  const DocumentsCount = characterCount + companyCount
-  var fieldsCount = req.body.fieldsNumber
-
-  res.render('admin/addCompany', {fieldsCount, DocumentsCount, Footer, countries, catgs, tags, user: req.user, texts, headingColor1, headingColor2, headingColor3, btnColor})
-})
-
-app.get('/company/:id', async (req, res) => {
-    const companyId = req.params.id;
-    const Footer = await Color.findOne({name: 'Footer'})
-    const btnColor = await Color.findOne({ name: 'btn-color' });
-    const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
-    const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
-    const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
-    const texts = await Text.find({});
-    const tags = await Tag.find({});
-    const characterCount = await Character.countDocuments()
-    const companyCount = await Company.countDocuments()
-    const DocumentsCount = characterCount + companyCount
-
-    await Company.findById(companyId)
-        .then(async (company) => {
-            if (!company) {
-                return res.status(404).send('Company not found');
-            }
-
-            // Increment the visits count
-            company.visits += 1;
-            await company.save();
-
-            // Find characters with the same category name excluding the current character
-            const sameCompanies = await Company.find({ catg: company.catg, _id: { $ne: company._id }})
-                .sort({ _id: -1 }) // Sort by descending _id to get the latest items first
-                .limit(3); // Limit the results to 3 items
-
-            // Render character details
-            res.render('company-details', {
-                DocumentsCount,
-                company,
-                Footer,
-                btnColor,
-                headingColor1,
-                headingColor2,
-                headingColor3,
-                user: req.user,
-                texts,
-                tags,
-                sameCompanies
-            });
-        })
-        .catch((err) => {
-            console.error("Error: " + err);
-            res.status(500).send('Error occurred while retrieving company');
-        });
-})
-
 app.post('/addCompany', async (req, res) => {
   try {
     await uploadPromise(req, res);
@@ -433,7 +476,13 @@ app.post('/addCompany', async (req, res) => {
     const data = fs.readFileSync(req.file.path);
     const imageBuffer = Buffer.from(data);
 
-    const companyData = {
+      // Assuming you have the user ID available in req.user.id
+    const userId = req.user.id;
+
+    // Find the user who created the character
+    const user = await User.findById(userId);
+
+    const company = new Company({
       image: imageBuffer.toString('base64'),
       arabicName: req.body.arabname,
       englishName: req.body.englname,
@@ -446,18 +495,8 @@ app.post('/addCompany', async (req, res) => {
       internetLocation: req.body.internetlocation,
       email: req.body.email,
       desc: req.body.info,
-    };
-
-    // Get the custom field names and values from the request body
-    const customFields = Object.keys(req.body).filter(key => key.startsWith('customName'));
-    customFields.forEach(field => {
-      const index = field.slice(10); // Extract the index from the field name
-      const fieldName = req.body[`customName${index}`];
-      const fieldValue = req.body[`customValue${index}`];
-      companyData[fieldName] = fieldValue;
-    });
-
-    const company = new Company(companyData);
+      createdBy: user
+    })
 
     company.save()
       .then(() => {
