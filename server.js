@@ -66,7 +66,7 @@ function checkFileType(file, cb) {
 require('./config/passport')(passport);
 
 // Connecting To MongoDB Server
-mongoose.connect('mongodb://127.0.0.1:27017/MnHum', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://youssef:Mada@3030@mnhum.rguk68a.mongodb.net/?retryWrites=true&w=majority&appName=MnHum', { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
   console.log('Connected to MongoDB');
 })
