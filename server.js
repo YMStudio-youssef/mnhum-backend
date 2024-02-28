@@ -833,7 +833,7 @@ app.get('/admin', async (req, res) => {
             })
         );
 
-        res.render('admin/dashboard', {
+        res.render('admin/Dashboard', {
             characterCount,
             companyCount,
             catgCount,
