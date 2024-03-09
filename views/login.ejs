@@ -14,7 +14,8 @@
         <div class="container">
             <nav>
                 <div class="logo-container">
-                    <img src="images/logo.png" alt="" class="logo">
+                    <h2>السيرة الذاتية</h2>
+                    <!-- <img src="images/logo.png" alt="" class="logo"> -->
                 </div>
                 <ul>
                     <li><a href="/" class="active">الرئيسية</a></li>
@@ -33,16 +34,12 @@
                     </li>
                     <li class="login-btn">
                         <li class="login-btn">
-                            <% if(user){ %>
-                                <%= user.name %>
-                            <% }else{ %>
-                                <a href="/login">
-                                    <button type="submit" style="background-color: <%= btnColor.value %>">
+                            <a href="/login">
+                                <button type="submit" style="background-color: <%= btnColor.value %>">
                                         <i class="fa-solid fa-user"></i>
                                         تسجيل الدخول
-                                    </button>
-                                </a>
-                            <% } %>
+                                </button>
+                            </a>
                         </li>
                     </li>
                     <li>

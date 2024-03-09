@@ -1244,8 +1244,15 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+function ensureNotAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) { // Check if not authenticated
+    return next();
+  }
+  res.redirect('/');
+}
+
 // Register Page
-app.get('/register', async (req, res) => {
+app.get('/register',ensureNotAuthenticated, async (req, res) => {
   const errors = []; // Define an empty errors array
   const texts = await Text.find({})
   const Footer = await Color.findOne({name: 'Footer'})
