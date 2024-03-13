@@ -167,6 +167,10 @@ const colorSchema = new mongoose.Schema({
     value: String
 })
 
+const adminSchema = new mongoose.Schema({
+  email: String,
+})
+
 const Character = mongoose.model('Character', characterSchema)
 const Company = mongoose.model('Company', companySchema)
 const Catg = mongoose.model('Catg', catgSchema)
@@ -174,6 +178,7 @@ const Tag = mongoose.model('Tag', tagsSchema)
 const Country = mongoose.model('Country', countrySchema)
 const Text = mongoose.model('Text', textSchema)
 const Color = mongoose.model('Color', colorSchema)
+const Admin = mongoose.model('Admin', adminSchema)
 
 app.get("/", async (req, res) => {
     const characters = await Character.find({}).sort({visits: -1}).limit(10)
@@ -901,63 +906,133 @@ app.post('/companyVisits', async (req, res) => {
     res.json({ company: foundCompany.visits, characterCount, companyCount, catgCount, characters, companies });
 })
 
-app.get('/admin', async (req, res) => {
-    try {
-        const characterCount = await Character.countDocuments();
-        const companyCount = await Company.countDocuments();
-        const catgCount = await Catg.countDocuments();
-        const characters = await Character.find({});
-        const companies = await Company.find({});
-        const users = await User.find({}).sort({ _id: -1 }).limit(5);
+app.get('/admin', (req, res) => {
+  res.render('admin/admin-home-login')
+})
 
-        // Read and buffer the user images
-        const userImages = await Promise.all(
+app.get('/admin/tables', (req, res) => {
+  res.render('admin/admin-tables-login')
+})
+
+app.get('/admin/settings', (req, res) => {
+  res.render('admin/admin-settings-login')
+})
+
+app.post('/adminhomelogin', async (req, res) => {
+  const userEmail = req.body.adminName
+  const password = req.body.adminPassword
+  const characterCount = await Character.countDocuments();
+  const companyCount = await Company.countDocuments();
+  const catgCount = await Catg.countDocuments();
+  const characters = await Character.find({});
+  const companies = await Company.find({});
+  const users = await User.find({}).sort({ _id: -1 }).limit(5);
+
+  // Read and buffer the user images
+  const userImages = await Promise.all(
             users.map(async (user) => {
                 const imagePath = path.join('public', 'uploads', user.image);
                 const imageBuffer = await fs.promises.readFile(imagePath);
                 return imageBuffer.toString('base64');
             })
-        );
+  );
 
-        res.render('admin/Dashboard', {
-            characterCount,
-            companyCount,
-            catgCount,
-            characters,
-            companies,
-            users,
-            userImages,
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+  Admin.findOne({email: userEmail})
+  .then((foundUser) => {
+    if(password == 'AdminPassword123'){
+      res.render('admin/Dashboard', {foundUser, characterCount, companyCount, catgCount, characters, companies, users, userImages})
+    }else{
+      res.send('password incorrect')
     }
-});
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+})
 
-app.get('/admin/tables', async (req, res) => {
-    const charactercolumnNames = await Object.keys(characterSchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
-    const characters = await Character.find()
-    const companycolumnNames = await Object.keys(companySchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
-    const companies = await Company.find()
-    const catgcolumnNames = await Object.keys(catgSchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
-    const catgs = await Catg.find()
-    const users = await User.find({}).sort({ _id: -1 })
-    const tags = await Tag.find({})
-    const countries = await Country.find({})
-    const characterCount = await Character.countDocuments();
-    const companyCount = await Company.countDocuments();
-    const catgCount = await Catg.countDocuments();
+app.post('/admintableslogin', async (req, res) => {
+  const charactercolumnNames = await Object.keys(characterSchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
+  const characters = await Character.find()
+  const companycolumnNames = await Object.keys(companySchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
+  const companies = await Company.find()
+  const catgcolumnNames = await Object.keys(catgSchema.paths).filter(key => key !== '_id' && key != 'image' && key != '__v');
+  const catgs = await Catg.find()
+  const users = await User.find({}).sort({ _id: -1 })
+  const tags = await Tag.find({})
+  const countries = await Country.find({})
+  const characterCount = await Character.countDocuments();
+  const companyCount = await Company.countDocuments();
+  const catgCount = await Catg.countDocuments();
+  const userEmail = req.body.adminName
+  const password = req.body.adminPassword
 
-    const userImages = await Promise.all(
-        users.map(async (user) => {
-            const imagePath = path.join('public', 'uploads', user.image);
-            const imageBuffer = await fs.promises.readFile(imagePath);
-            return imageBuffer.toString('base64');
-        })
-    );
+  const userImages = await Promise.all(
+      users.map(async (user) => {
+          const imagePath = path.join('public', 'uploads', user.image);
+          const imageBuffer = await fs.promises.readFile(imagePath);
+          return imageBuffer.toString('base64');
+      })
+  );
 
-    res.render('admin/tables', {catgCount, characterCount, companyCount, characters, charactercolumnNames, companies, companycolumnNames, catgs, catgcolumnNames, users, userImages, tags, countries})
+  Admin.findOne({email: userEmail})
+  .then((foundUser) => {
+    if(password == 'AdminPassword123'){
+      res.render('admin/tables', {catgCount, characterCount, companyCount, characters, charactercolumnNames, companies, companycolumnNames, catgs, catgcolumnNames, users, userImages, tags, countries})
+    }else{
+      res.send('password incorrect')
+    }
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+
+
+})
+
+app.post('/adminsettingslogin', async (req, res) => {
+  const characterCount = await Character.countDocuments();
+  const companyCount = await Company.countDocuments();
+  const catgCount = await Catg.countDocuments();
+  const texts = await Text.find()
+  const colors = await Color.find()
+  const userEmail = req.body.adminName
+  const password = req.body.adminPassword
+
+  Admin.findOne({email: userEmail})
+  .then((foundUser) => {
+    if(password == 'AdminPassword123'){
+      res.render('admin/settings', {catgCount, characterCount, companyCount, texts, colors})
+    }else{
+      res.send('password incorrect')
+    }
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+
+
+})
+
+app.get('/addadminuser', async (req, res) => {
+  const users = await User.find({})
+
+  res.render('admin/addadminusers', {users})
+})
+
+app.post('/adduser', (req, res) => {
+  const userEmail = req.body.user
+
+  const newAdmin = new Admin({
+    email: userEmail
+  })
+
+  newAdmin.save()
+  .then(() => {
+    console.log('User Role Changed To Admin ^-^')
+  })
+  .catch((err) => {
+    console.error('An Error Occured While Trying To Change The User Role: ' + err)
+  })
 })
 
 app.post('/deleteUser', (req, res) => {
@@ -984,16 +1059,6 @@ app.post('/deleteCountry', (req, res) => {
     .catch((err) => {
         console.error(err)
     })
-})
-
-app.get('/admin/settings', async (req, res) => {
-    const characterCount = await Character.countDocuments();
-    const companyCount = await Company.countDocuments();
-    const catgCount = await Catg.countDocuments();
-    const texts = await Text.find()
-    const colors = await Color.find()
-
-    res.render('admin/settings', {characterCount, companyCount, catgCount, texts, colors})
 })
 
 app.post('/addText', (req, res) => {
@@ -1279,6 +1344,7 @@ app.get('/register',ensureNotAuthenticated, async (req, res) => {
 
 // Register Handle
 app.post('/register', (req, res) => {
+  const btnColor = Color.findOne({name: 'btn-color'})
   const { name, email, password, confirmPassword } = req.body;
   let errors = [];
 
@@ -1303,7 +1369,8 @@ app.post('/register', (req, res) => {
       name,
       email,
       password,
-      confirmPassword
+      confirmPassword,
+      btnColor
     });
   } else {
     // Validation passed
@@ -1317,7 +1384,8 @@ app.post('/register', (req, res) => {
             name,
             email,
             password,
-            confirmPassword
+            confirmPassword,
+            btnColor
           });
         } else {
           // Create new user
@@ -1349,31 +1417,30 @@ app.post('/register', (req, res) => {
 
 // Login Page
 app.get('/login', async (req, res) => {
-    const texts = await Text.find({})
-    const btnColor = await Color.findOne({name: 'btn-color'})
-    const Footer = await Color.findOne({name: 'Footer'})
-    const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
-    const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
-    const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
-    const tags = await Tag.find({}).sort({visits: -1}).limit(5)
-    
-    res.render('login', { 
-        error_msg: req.flash('error_msg'),
-        user: req.user,
-        texts,
-        btnColor,
-        headingColor1,
-        headingColor2,
-        headingColor3,
-        tags,
-        Footer
-    });
-});
+  const texts = await Text.find({});
+  const btnColor = await Color.findOne({ name: 'btn-color' });
+  const Footer = await Color.findOne({ name: 'Footer' });
+  const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
+  const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
+  const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
+  const tags = await Tag.find({}).sort({ visits: -1 }).limit(5);
 
+  res.render('login', {
+    error_msg: req.flash('error'),
+    user: req.user,
+    texts,
+    btnColor,
+    headingColor1,
+    headingColor2,
+    headingColor3,
+    tags,
+    Footer
+  });
+});
 // Login Handle
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/profile',
+    successRedirect: '/dashboard',
     failureRedirect: '/login',
     failureFlash: true
   })(req, res, next);

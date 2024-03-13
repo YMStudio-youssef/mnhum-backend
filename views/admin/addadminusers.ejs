@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Admin User</title>
+</head>
+<body>
+    <h1>Add Admin User</h1>
+    <form action="/adduser" method="post" novalidate>
+        <select name="user">
+            <option value="">Select User</option>
+            <% users.forEach((user) => { %>
+                <option value="<%= user.email %>"><%= user.name %> <%= user.email %></option>
+            <% }) %>
+        </select>
+        <button type="submit">Make User As Admin</button>
+    </form>
+</body>
+</html>
