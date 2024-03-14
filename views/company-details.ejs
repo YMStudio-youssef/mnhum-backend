@@ -8,8 +8,11 @@
             <div class="info">
                 <div class="top">
                     <div class="image">
-                        <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="width: 100%;">
-                    </div>
+                        <% if (company.image == 'default.jpg') { %>
+                            <img src="/uploads/<%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                        <% } else { %>
+                            <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                        <% } %>                      </div>
                     <div class="text">
                         <h2 class="characterName">من هو؟ <%= company.arabicName %></h2>
                         <h4 class="nick">الاسم بالانجليزية:  - <%= company.englishName %></h4>
@@ -53,8 +56,11 @@
                         <a href="/company/<%= company._id %>">
                             <div class="character">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
-                                </div>
+                                    <% if (company.image == 'default.jpg') { %>
+                                        <img src="/uploads/<%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } else { %>
+                                        <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } %>                                  </div>
                                 <div class="info">
                                     <h3 class="char-name" style="color: black;"><%= company.arabicName %></h3>
                                     <p class="char-bio" style="color: rgb(145, 145, 145);"><%= company.desc.substring(0, 30) %>...</p>

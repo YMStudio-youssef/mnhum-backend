@@ -12,7 +12,11 @@
                         <div class="catg">
                             <a href="/companies/<%= company._id %>">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% if (company.image == 'default.jpg') { %>
+                                        <img src="/uploads/<%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } else { %>
+                                        <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } %>  
                                 </div>
                             </a>
                             <div class="info">

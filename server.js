@@ -81,7 +81,10 @@ mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: 
 
 // Defineing The Schemas
 const characterSchema = new mongoose.Schema({
-    image: String,
+    image: {
+      type: String,
+      default: 'default.jpg',
+    },
     firstName: String,
     lastName: String,
     nickName: String,
@@ -111,7 +114,10 @@ const characterSchema = new mongoose.Schema({
 }, {strict: false})
 
 const companySchema = new mongoose.Schema({
-    image: String,
+    image: {
+      type: String,
+      default: 'default.jpg',
+    },
     arabicName: String,
     englishName: String,
     country: String,
@@ -414,19 +420,22 @@ app.post('/addCharacter', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const data = fs.readFileSync(req.file.path);
-    const imageBuffer = Buffer.from(data);
+    let imageBuffer;
+    if (req.file) {
+      const data = fs.readFileSync(req.file.path);
+      imageBuffer = Buffer.from(data);
+    }
 
     // Assuming you have the user ID available in req.user.id
     const userId = req.user.id;
 
     // Find the user who created the character
     const user = await User.findById(userId);
-    
-    console.log(user)
+
+    console.log(user);
 
     const character = new Character({
-      image: imageBuffer.toString('base64'),
+      image: imageBuffer ? imageBuffer.toString('base64') : undefined,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       nickName: req.body.nickname,
@@ -438,12 +447,13 @@ app.post('/addCharacter', async (req, res) => {
       desc: req.body.info,
       historicalPeriod: req.body.histperiod,
       catg: req.body.catg,
-      createdBy: user
+      createdBy: user,
     });
 
-    character.save()
-      .then(() => {
-        console.log('Character saved!');
+    character
+      .save()
+      .then((character) => {
+        console.log('Character saved!' + character);
         res.redirect('/');
       })
       .catch((err) => {
@@ -478,17 +488,20 @@ app.post('/addCompany', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const data = fs.readFileSync(req.file.path);
-    const imageBuffer = Buffer.from(data);
+    let imageBuffer;
+    if (req.file) {
+      const data = fs.readFileSync(req.file.path);
+      imageBuffer = Buffer.from(data);
+    }
 
-      // Assuming you have the user ID available in req.user.id
+    // Assuming you have the user ID available in req.user.id
     const userId = req.user.id;
 
-    // Find the user who created the character
+    // Find the user who created the company
     const user = await User.findById(userId);
 
     const company = new Company({
-      image: imageBuffer.toString('base64'),
+      image: imageBuffer ? imageBuffer.toString('base64') : undefined,
       arabicName: req.body.arabname,
       englishName: req.body.englname,
       country: req.body.country,
@@ -501,11 +514,11 @@ app.post('/addCompany', async (req, res) => {
       email: req.body.email,
       desc: req.body.info,
       createdBy: user
-    })
+    });
 
     company.save()
       .then(() => {
-        console.log('Character saved!');
+        console.log('Company saved!');
         res.redirect('/');
       })
       .catch((err) => {

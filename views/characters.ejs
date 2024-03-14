@@ -12,7 +12,11 @@
                         <div class="catg">
                             <a href="/character/<%= character._id %>">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% if (character.image == 'default.jpg') { %>
+                                        <img src="/uploads/<%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } else { %>
+                                        <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } %>                                  
                                 </div>
                             </a>
                             <div class="info">

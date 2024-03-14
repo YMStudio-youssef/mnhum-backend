@@ -10,7 +10,11 @@
                         <a href="/character/<%= character._id %>">
                             <div class="character">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% if (character.image == 'default.jpg') { %>
+                                        <img src="/uploads/<%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } else { %>
+                                        <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } %>                                  
                                 </div>
                                 <div class="info">
                                     <h3 class="char-name" style="color: black;"><%= character.firstName %> <%= character.lastName %></h3>
@@ -28,8 +32,11 @@
                         <a href="/company/<%= company._id %>">
                             <div class="company">
                                 <div class="image">
-                                    <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
-                                </div>
+                                    <% if (company.image == 'default.jpg') { %>
+                                        <img src="/uploads/<%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } else { %>
+                                        <img src="data:image/jpeg;base64, <%= company.image %>" alt="Uploaded Image" style="height: 180px;">
+                                    <% } %>                                  </div>
                                 <div class="info">
                                     <h3 class="comp-title" style="color: black;"><%= company.arabicName %></h3>
                                 </div>
