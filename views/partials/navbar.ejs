@@ -23,19 +23,26 @@
                 </ul>
                 <ul>
                     <li>
-                        <select name="" id="">
-                            <option value="">السعودية</option>
-                            <option value="">مصر</option>
-                            <option value="">قطر</option>
-                            <option value="">الاردن</option>
+                        <select name="" id="" class="flat-select">
+                          <option value="">السعودية</option>
+                          <option value="">مصر</option>
+                          <option value="">قطر</option>
+                          <option value="">الاردن</option>
                         </select>
                     </li>
                     <li class="login-btn">
                         <li class="login-btn">
                             <% if(user){ %>
-                                <a href="/profile" style="color: black;">
-                                    <%= user.name %>
-                                </a>
+                                <div class="dropdown">
+                                    <a href="/profile" style="color: black;">
+                                      <%= user.name %>
+                                    </a>
+                                    <div class="dropdown-content">
+                                      <a href="/profile">صفحة المستخدم</a>
+                                      <!-- <hr color="white"> -->
+                                      <a href="/logout" style="color: #dc3545; font-weight: bolder;">تسجيل الخروج</a>
+                                    </div>
+                                  </div>
                             <% }else{ %>
                                 <a href="/login">
                                     <button type="submit" style="background-color: <%= btnColor.value %>">
