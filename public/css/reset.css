@@ -384,6 +384,29 @@ footer .footer{
   color: #fff;
 }
 
+/* Custome Table Style */
+
+.custom-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 8px;
+  text-align: right;
+  border-bottom: 1px solid rgb(66, 183, 226);
+}
+
+.custom-table th {
+  background-color: rgb(236, 249, 254);
+  font-weight: bold;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
 /* Responsive Container Code */
 
 @media (max-width: 575.98px) {  }

@@ -677,7 +677,7 @@ app.post('/characterUpdate', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const characterName = req.body.name;
+    const characterName = req.body.character;
 
     const updateFields = {
       firstName: req.body.firstname,
@@ -701,12 +701,17 @@ app.post('/characterUpdate', async (req, res) => {
     }
 
     const updatedCharacter = await Character.findOneAndUpdate(
-      { englishName: characterName },
+      { firstName: characterName },
       updateFields,
       { new: true }
-    );
+    ).then(() => {
+      console.log('character updated!')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 
-    res.send('Character updated successfully');
+    res.redirect('/')
   } catch (err) {
     console.error(err);
     res.status(500).send('An error occurred');
@@ -1491,6 +1496,50 @@ app.post('/logout', (req, res, next) => {
     res.redirect('/')
   })
 })
+
+app.post('/userUpdateCharacter', async (req, res) => {
+  try {
+    const catgs = await Catg.find({});
+    const character = await Character.find({ firstName: req.body.character });
+    const countries = await Country.find()
+    const texts = await Text.find({})
+    const btnColor = await Color.findOne({name: 'btn-color'})
+    const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
+    const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
+    const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
+    const characterCount = await Character.countDocuments()
+    const companyCount = await Company.countDocuments()
+    const DocumentsCount = characterCount + companyCount
+    const Footer = await Color.findOne({name: 'Footer'})
+    const tags = await Tag.find({}).sort({visits: -1}).limit(5)
+
+    res.render('userupdatecharacterform', { character: character[0], catgs, countries, user: req.user, btnColor, headingColor1, headingColor2, headingColor3, texts, DocumentsCount, tags, Footer });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+app.post('/userUpdateCompany', async (req, res) => {
+  try {
+    const catgs = await Catg.find({});
+    const company = await Company.find({ englishName: req.body.company });
+    const countries = await Country.find()
+    const texts = await Text.find({})
+    const btnColor = await Color.findOne({name: 'btn-color'})
+    const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
+    const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
+    const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
+    const characterCount = await Character.countDocuments()
+    const companyCount = await Company.countDocuments()
+    const DocumentsCount = characterCount + companyCount
+    const Footer = await Color.findOne({name: 'Footer'})
+    const tags = await Tag.find({}).sort({visits: -1}).limit(5)
+
+    res.render('userupdatecompanyform', {countries, company: company[0], catgs , user: req.user, tags, Footer, headingColor1, headingColor2, headingColor3, texts, btnColor, DocumentsCount});
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 app.listen(3000, () => {
     console.log('App Is Running On Port 3000')

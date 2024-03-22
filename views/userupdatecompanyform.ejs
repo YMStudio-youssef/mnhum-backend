@@ -1,0 +1,41 @@
+<%- include('./partials/navbar') %>
+<link rel="stylesheet" href="/css/userupdatecompanyform.css">
+<div class="container">
+    <h2>تعديل الشركة: <%= company.englishName %> - <%= company.arabicName %></h2>
+    <form action="/companyUpdate" method="post" novalidate enctype="multipart/form-data" class="updateform">
+        <input type="text" name="name" value="<%= company.englishName %>" hidden>
+        <br>
+        <input type="file" name="image" placeholder="Select Image: ">
+        <br>
+        <input type="text" name="arabName" value="<%= company.arabicName %>">
+        <br>
+        <input type="text" name="englName" value="<%= company.englishName %>">
+        <br>
+        <input type="text" name="country" value="<%= company.country %>">
+        <br>
+        <input type="text" name="mainbranch" value="<%= company.mainBranch %>">
+        <br>
+        <input type="text" name="code" value="<%= company.code %>">
+        <br>
+        <input type="text" name="phonenumber" value="<%= company.phoneNumber %>">
+        <br>
+        <select name="catg">
+            <option value="<%= company.catg %>"><%= company.catg %></option>
+            <% catgs.forEach((catg) => { %>
+                <option value="<%= catg.title %>"><%= catg.title %></option>
+            <% }) %>
+        </select>
+        <br>
+        <input type="text" name="webiste" value="<%= company.website %>">
+        <br>
+        <input type="text" name="internetlocation" value="<%= company.internetLocation %>">
+        <br>
+        <input type="email" name="email" value="<%= company.email %>">
+        <br>
+        <textarea name="desc" cols="30" rows="10"><%= company.desc %></textarea>
+        <br>
+        <button type="submit">Update Company</button>
+        <br>
+    </form>
+</div>
+<%- include('./partials/footer') %>

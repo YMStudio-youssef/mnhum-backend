@@ -46,6 +46,10 @@
                               <input type="hidden" name="companyId" value="<%= company._id %>">
                               <button type="submit">Insert</button>
                             </form>
+                            <form action="/userUpdateCompany" method="post" novalidate>
+                                <input type="text" name="company" value="<%= company.englishName %>" hidden>
+                                <button type="submit">Update</button>
+                            </form>
                         <% } %>
                     </div>
                 </div>

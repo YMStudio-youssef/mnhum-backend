@@ -1,0 +1,75 @@
+<%- include('./partials/navbar') %>
+<link rel="stylesheet" href="/css/userupdatecharacterform.css">
+<div class="container">
+    <h2>تعديل الشخصية: <%= character.firstName %> <%= character.lastName %></h2>
+    <form action="/characterUpdate" method="post" novalidate enctype="multipart/form-data" class="updateform">
+        <br>
+        <input type="file" name="image">
+        <br>
+        <input type="text" name="firstname" value="<%= character.firstName %>">
+        <input type="text" name="character" value="<%= character.firstName %>" hidden>
+        <br>
+        <input type="text" name="lastname" value="<%= character.lastName %>">
+        <br>
+        <input type="text" name="nickname" value="<%= character.nickName %>">
+        <br>
+        <input type="date" name="birthday" value="<%= character.birthday %>">
+        <br>
+        <input type="date" name="dieday" value="<%= character.dieday %>">
+        <br>
+        <select name="nationality">
+            <option value="<%= character.nationality %>"><%= character.nationality %></option>
+            <% countries.forEach((country) => { %>
+                <option value="<%= country.title %>"><%= country.title %></option>
+            <% }) %>
+        </select>
+        <br>
+        <select name="catg">
+            <option value="<%= character.catg %>"><%= character.catg %></option>
+            <% catgs.forEach((catg) => { %>
+                <option value="<%= catg.title %>"><%= catg.title %></option>
+            <% }) %>
+        </select>
+        <br>
+        <input type="text" name="job" value="<%= character.job %>">
+        <br>
+        <input type="date" name="historicalPeriod" value="<%= character.historicalPeriod %>">
+        <br>
+        <style>
+            .wrapper{
+                display: flex;
+                gap: 20px;
+            }
+            .wrapper .col{
+                display: flex;
+                /* flex-direction: column; */
+                gap: 10px;
+            }
+            #option-1, #option-2{width: 45%;}
+            /* #option-2{width: 50%;} */
+        </style>
+        <div class="wrapper">
+            <% if(character.type == 'ذكر'){ %>
+                <div class="col">
+                    <input type="radio" name="type" id="option-1" checked value="ذكر" class="radio">
+                    <label for="option-1" class="option option-1"><span>ذكر</span></label>
+                </div>
+                <div class="col">
+                    <input type="radio" name="type" id="option-2" value="انثى" class="radio">
+                    <label for="option-2" class="option option-2"><span>انثى</span></label>
+                </div>
+            <% }else{ %>
+                <input type="radio" name="type" id="option-1" value="ذكر">
+                <label for="option-1" class="option option-1"><span>ذكر</span></label>
+                <input type="radio" name="type" id="option-2" checked value="انثى">
+                <label for="option-2" class="option option-2"><span>انثى</span></label>
+            <% } %>
+        </div>
+        <br>
+        <textarea name="desc" cols="30" rows="10"><%= character.desc %></textarea>
+        <br>
+        <button type="submit">Update Character</button>
+        <br>
+    </form>
+</div>
+<%- include('./partials/footer') %>

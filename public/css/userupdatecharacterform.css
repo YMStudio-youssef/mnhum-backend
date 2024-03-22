@@ -1,0 +1,19 @@
+.updateform input, textarea, form select{
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+input.radio{
+    margin: 0;
+}
+.updateform button{
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background-color: rgb(65, 105, 227);
+    border: none;
+    cursor: pointer;
+}
