@@ -137,10 +137,10 @@
                           <input type="text" name="character" value="<%= character.firstName %>" hidden>
                           <button type="submit">Delete</button>
                       </form>
-                      <form action="/updateCharacter" method="post" novalidate>
-                          <input type="text" name="character" value="<%= character.firstName %>" hidden>
-                          <button type="submit">Update</button>
-                      </form>
+                      <form action="/updateCharacter" method="post">
+                        <input type="text" name="character" value="<%= character._id %>" hidden>
+                        <button type="submit">Update</button>
+                    </form>
                     </td>
                   </tr>
                 <% }) %>

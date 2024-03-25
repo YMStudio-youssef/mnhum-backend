@@ -28,7 +28,7 @@
                                     <div class="info">
                                         <h2>صورة شخصية</h2>
                                         <!-- <p>هذه هي الصورة الشخصية الخاصة بك</p> -->
-                                        <input type="file" name="image" id="">
+                                        <input type="file" name="image" id="" accept=".png, .jpg, .jpeg">
                                     </div>
                                 </div>
                                 <div class="info-add">
@@ -81,8 +81,10 @@
                                     </div>
                                     <label for="job">المهنة الحالية</label>
                                     <input type="text" class="full-input" name="job">
-                                    <label for="historical-period">الفترة التاريخية</label>
-                                    <input type="date" name="histperiod" id="historical-period" class="full-input">
+                                    <label for="historical-period">الفترة التاريخية (من)</label>
+                                    <input type="date" name="dateFrom" id="historical-period" class="full-input">
+                                    <label for="historical-period">الفترة التاريخية (الى)</label>
+                                    <input type="date" name="dateTo" id="historical-period" class="full-input">
                                     <div class="input-row">
                                         <label for="catg">التصنيف</label>
                                         <select name="catg" id="catg" class="full-input">

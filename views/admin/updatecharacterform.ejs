@@ -121,13 +121,13 @@
 						<h3>Recent Users</h3>
 					</div>
                     <div class="body">
-                        <h1>Update Character: <%= character.name %></h1>
+                        <h1>Update Character: <%= character.firstName %> - <%= character.lastName %></h1>
                         <form action="/characterUpdate" method="post" novalidate enctype="multipart/form-data">
                             <br>
                             <input type="file" name="image">
                             <br>
                             <input type="text" name="firstname" value="<%= character.firstName %>">
-                            <input type="text" name="character" value="<%= character.firstName %>" hidden>
+                            <input type="text" name="character" value="<%= character._id %>" hidden>
                             <br>
                             <input type="text" name="lastname" value="<%= character.lastName %>">
                             <br>
@@ -153,7 +153,12 @@
                             <br>
                             <input type="text" name="job" value="<%= character.job %>">
                             <br>
-                            <input type="date" name="historicalPeriod" value="<%= character.historicalPeriod %>">
+							<br>
+							<label for="">الفترة التاريخية (من)</label>
+							<input type="date" name="dateFrom" value="<%= character.dateFrom %>">
+							<br>
+							<label for="">الفترة التاريخية (الى)</label>
+							<input type="date" name="dateTo" value="<%= character.dateTo %>">
                             <br>
                             <style>
                                 .wrapper{

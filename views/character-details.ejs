@@ -13,7 +13,8 @@
                             <img src="/uploads/<%= character.image %>" alt="Uploaded Image" style="height: 180px;">
                         <% } else { %>
                             <img src="data:image/jpeg;base64, <%= character.image %>" alt="Uploaded Image" style="height: 180px;">
-                        <% } %>                    </div>
+                        <% } %>                    
+                    </div>
                     <div class="text">
                         <h2 class="characterName">من هو؟ <%= character.firstName %> - <%= character.lastName %></h2>
                         <h4 class="nick"><%= character.nickName %></h4>
@@ -21,7 +22,7 @@
                         <h4>الجنسية: <%= character.nationality %></h4>
                         <h4>تاريخ الميلاد <%= character.birthday %></h4>
                         <h4>تاريخ الوفاة <%= character.dieday %></h4>
-                        <h4>الفترة التاريخية <%= character.historicalPeriod %></h4>
+                        <h4>الفترة التاريخية <%= character.dateFrom %> الى <%= character.dateTo %></h4>
                         <h4>المهنة الحالية: <%= character.job %></h4>
                     </div>
                 </div>
@@ -63,8 +64,8 @@
                               <input type="hidden" name="characterId" value="<%= character._id %>">
                               <button type="submit">Insert</button>
                             </form>
-                            <form action="/userUpdateCharacter" method="post" novalidate>
-                                <input type="text" name="character" value="<%= character.firstName %>" hidden>
+                            <form action="/userUpdateCharacter" method="post">
+                                <input type="text" name="character" value="<%= character._id %>" hidden>
                                 <button type="submit">Update</button>
                             </form>
                         <% } %>

@@ -81,7 +81,11 @@ mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: 
 
 // Defineing The Schemas
 const characterSchema = new mongoose.Schema({
-    image: String,
+    image: {
+      type: String,
+      required: false,
+      default: 'default.jpg'
+    },
     firstName: String,
     lastName: String,
     nickName: String,
@@ -91,7 +95,8 @@ const characterSchema = new mongoose.Schema({
     job: String,
     type: String,
     desc: String,
-    historicalPeriod: String,
+    dateFrom: String,
+    dateTo: String,
     catg: String,
     visits: {
         type: Number,
@@ -111,7 +116,11 @@ const characterSchema = new mongoose.Schema({
 }, {strict: false})
 
 const companySchema = new mongoose.Schema({
-    image: String,
+    image: {
+      type: String,
+      required: false,
+      default: 'default.jpg'
+    },
     arabicName: String,
     englishName: String,
     country: String,
@@ -409,19 +418,22 @@ app.post('/addCharacter', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const data = fs.readFileSync(req.file.path);
-    const imageBuffer = Buffer.from(data);
+    let imageBuffer;
+    if (req.file) {
+      const data = fs.readFileSync(req.file.path);
+      imageBuffer = Buffer.from(data);
+    }
 
     // Assuming you have the user ID available in req.user.id
     const userId = req.user.id;
 
     // Find the user who created the character
     const user = await User.findById(userId);
-    
-    console.log(user)
+
+    console.log(user);
 
     const character = new Character({
-      image: imageBuffer.toString('base64'),
+      image: req.file ? imageBuffer.toString('base64') : undefined,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       nickName: req.body.nickname,
@@ -431,7 +443,8 @@ app.post('/addCharacter', async (req, res) => {
       job: req.body.job,
       type: req.body.type,
       desc: req.body.info,
-      historicalPeriod: req.body.histperiod,
+      dateFrom: req.body.dateFrom,
+      dateTo: req.body.dateTo,
       catg: req.body.catg,
       createdBy: user
     });
@@ -473,17 +486,20 @@ app.post('/addCompany', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const data = fs.readFileSync(req.file.path);
-    const imageBuffer = Buffer.from(data);
+    let imageBuffer;
+    if (req.file) {
+      const data = fs.readFileSync(req.file.path);
+      imageBuffer = Buffer.from(data);
+    }
 
-      // Assuming you have the user ID available in req.user.id
+    // Assuming you have the user ID available in req.user.id
     const userId = req.user.id;
 
-    // Find the user who created the character
+    // Find the user who created the company
     const user = await User.findById(userId);
 
     const company = new Company({
-      image: imageBuffer.toString('base64'),
+      image: req.file ? imageBuffer.toString('base64') : undefined,
       arabicName: req.body.arabname,
       englishName: req.body.englname,
       country: req.body.country,
@@ -496,11 +512,11 @@ app.post('/addCompany', async (req, res) => {
       email: req.body.email,
       desc: req.body.info,
       createdBy: user
-    })
+    });
 
     company.save()
       .then(() => {
-        console.log('Character saved!');
+        console.log('Company saved!');
         res.redirect('/');
       })
       .catch((err) => {
@@ -632,13 +648,13 @@ app.post('/deleteCatgs', async (req, res) => {
 app.post('/updateCharacter', async (req, res) => {
     try {
       const catgs = await Catg.find({});
-      const character = await Character.find({ firstName: req.body.character });
+      const character = await Character.findById(req.body.character);
       const countries = await Country.find()
       const characterCount = await Character.countDocuments()
       const companyCount = await Company.countDocuments()
       const catgCount = await Catg.countDocuments()
 
-      res.render('admin/updatecharacterform', { characterCount, companyCount, catgCount, character: character[0], catgs, countries });
+      res.render('admin/updatecharacterform', { characterCount, companyCount, catgCount, character, catgs, countries });
     } catch (err) {
       console.error(err);
     }
@@ -677,8 +693,9 @@ app.post('/characterUpdate', async (req, res) => {
   try {
     await uploadPromise(req, res);
 
-    const characterName = req.body.character;
-
+    const characterId = req.body.character;
+    console.log(characterId)
+    
     const updateFields = {
       firstName: req.body.firstname,
       lastName: req.body.lastname,
@@ -689,7 +706,8 @@ app.post('/characterUpdate', async (req, res) => {
       job: req.body.job,
       type: req.body.type,
       desc: req.body.desc,
-      historicalPeriod: req.body.historicalPeriod,
+      dateFrom: req.body.dateFrom,
+      dateTo: req.body.dateTo,
       catg: req.body.catg,
     };
 
@@ -701,11 +719,11 @@ app.post('/characterUpdate', async (req, res) => {
     }
 
     const updatedCharacter = await Character.findOneAndUpdate(
-      { firstName: characterName },
+      { _id: characterId },
       updateFields,
       { new: true }
-    ).then(() => {
-      console.log('character updated!')
+    ).then((character) => {
+      console.log(character)
     })
     .catch((err) => {
       console.error(err)
@@ -1499,23 +1517,44 @@ app.post('/logout', (req, res, next) => {
 
 app.post('/userUpdateCharacter', async (req, res) => {
   try {
+    // Retrieve data and perform necessary queries
     const catgs = await Catg.find({});
-    const character = await Character.find({ firstName: req.body.character });
-    const countries = await Country.find()
-    const texts = await Text.find({})
-    const btnColor = await Color.findOne({name: 'btn-color'})
-    const headingColor1 = await Color.findOne({name: 'Heading-Back-Color1'})
-    const headingColor2 = await Color.findOne({name: 'Heading-Back-Color2'})
-    const headingColor3 = await Color.findOne({name: 'Heading-Back-Color3'})
-    const characterCount = await Character.countDocuments()
-    const companyCount = await Company.countDocuments()
-    const DocumentsCount = characterCount + companyCount
-    const Footer = await Color.findOne({name: 'Footer'})
-    const tags = await Tag.find({}).sort({visits: -1}).limit(5)
+    const character = await Character.findById(req.body.character);
+    const countries = await Country.find();
+    const texts = await Text.find({});
+    const btnColor = await Color.findOne({ name: 'btn-color' });
+    const headingColor1 = await Color.findOne({ name: 'Heading-Back-Color1' });
+    const headingColor2 = await Color.findOne({ name: 'Heading-Back-Color2' });
+    const headingColor3 = await Color.findOne({ name: 'Heading-Back-Color3' });
+    const characterCount = await Character.countDocuments();
+    const companyCount = await Company.countDocuments();
+    const DocumentsCount = characterCount + companyCount;
+    const Footer = await Color.findOne({ name: 'Footer' });
+    const tags = await Tag.find({}).sort({ visits: -1 }).limit(5);
 
-    res.render('userupdatecharacterform', { character: character[0], catgs, countries, user: req.user, btnColor, headingColor1, headingColor2, headingColor3, texts, DocumentsCount, tags, Footer });
+    // Check if character is null or undefined
+    if (!character) {
+      throw new Error('Character not found');
+    }
+
+    // Render the template with the retrieved data
+    res.render('userupdatecharacterform', {
+      character,
+      catgs,
+      countries,
+      user: req.user,
+      btnColor,
+      headingColor1,
+      headingColor2,
+      headingColor3,
+      texts,
+      DocumentsCount,
+      tags,
+      Footer,
+    });
   } catch (err) {
     console.error(err);
+    // Handle the error appropriately (e.g., render an error page)
   }
 });
 

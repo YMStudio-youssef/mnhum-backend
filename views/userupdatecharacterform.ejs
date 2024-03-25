@@ -7,7 +7,7 @@
         <input type="file" name="image">
         <br>
         <input type="text" name="firstname" value="<%= character.firstName %>">
-        <input type="text" name="character" value="<%= character.firstName %>" hidden>
+        <input type="text" name="character" value="<%= character._id %>" hidden>
         <br>
         <input type="text" name="lastname" value="<%= character.lastName %>">
         <br>
@@ -33,7 +33,11 @@
         <br>
         <input type="text" name="job" value="<%= character.job %>">
         <br>
-        <input type="date" name="historicalPeriod" value="<%= character.historicalPeriod %>">
+        <label for="">الفترة التاريخية (من)</label>
+        <input type="date" name="dateFrom" value="<%= character.dateFrom %>">
+        <br>
+        <label for="">الفترة التاريخية (الى)</label>
+        <input type="date" name="dateTo" value="<%= character.dateTo %>">
         <br>
         <style>
             .wrapper{
@@ -45,7 +49,7 @@
                 /* flex-direction: column; */
                 gap: 10px;
             }
-            #option-1, #option-2{width: 45%;}
+            #option-1, #option-2{width:10%;}
             /* #option-2{width: 50%;} */
         </style>
         <div class="wrapper">
