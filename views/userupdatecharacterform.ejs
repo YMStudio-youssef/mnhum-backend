@@ -72,6 +72,14 @@
         <br>
         <textarea name="desc" cols="30" rows="10"><%= character.desc %></textarea>
         <br>
+        <% if (character.data.length > 0) { %>
+            <% character.data.forEach((document, index) => { %>
+                <label for=""><%= document.fieldName %></label>
+                <input type="text" class="full-input" value="<%= document.fieldName %>" name="fieldName<%= index %>-input" hidden>
+                <input type="text" class="full-input" value="<%= document.fieldValue %>" name="fieldValue<%= index %>-input">
+            <% }); %>
+        <% } %>
+        <br>
         <button type="submit">Update Character</button>
         <br>
     </form>

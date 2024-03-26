@@ -54,19 +54,22 @@
                             <% } %>
                         <% } %>
                         <% if (isAuthenticated && createdByMatch) { %>
-                            <h4>Insert New Field And Value</h4>
+                            <h4>اضافة اي معلومات جانبية للشخصية ؟</h4>
                             <form action="/charInsert" method="post" novalidate>
-                              <label for="fieldName">Name: </label>
-                              <input type="text" placeholder="Field Name" id="fieldName" name="fieldName">
-                              <br>
-                              <label for="fieldValue">Value: </label>
-                              <input type="text" placeholder="Field Value" id="fieldValue" name="fieldValue">
-                              <input type="hidden" name="characterId" value="<%= character._id %>">
-                              <button type="submit">Insert</button>
+                                <div class="row" style="display: flex; flex-direction: column;">
+                                    <label for="fieldName">الاسم</label>
+                                    <input type="text" placeholder="Field Name" id="fieldName" name="fieldName" class="full-input">
+                                </div>
+                                <div class="row">
+                                    <label for="fieldValue">القيمة</label>
+                                    <input type="text" placeholder="Field Value" id="fieldValue" name="fieldValue" class="full-input">
+                                </div>
+                                <input type="hidden" name="characterId" value="<%= character._id %>">
+                                <button type="submit" class="btn">اضافة</button>
                             </form>
                             <form action="/userUpdateCharacter" method="post">
                                 <input type="text" name="character" value="<%= character._id %>" hidden>
-                                <button type="submit">Update</button>
+                                <button type="submit" class="btn">تحديث الشخصية</button>
                             </form>
                         <% } %>
                     </div>

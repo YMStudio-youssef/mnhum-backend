@@ -694,8 +694,8 @@ app.post('/characterUpdate', async (req, res) => {
     await uploadPromise(req, res);
 
     const characterId = req.body.character;
-    console.log(characterId)
-    
+    console.log(characterId);
+
     const updateFields = {
       firstName: req.body.firstname,
       lastName: req.body.lastname,
@@ -718,18 +718,37 @@ app.post('/characterUpdate', async (req, res) => {
       updateFields.image = imageBuffer.toString('base64');
     }
 
-    const updatedCharacter = await Character.findOneAndUpdate(
-      { _id: characterId },
-      updateFields,
-      { new: true }
-    ).then((character) => {
-      console.log(character)
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+    const updatedCharacter = await Character.findOne({ _id: characterId });
 
-    res.redirect('/')
+    if (!updatedCharacter) {
+      return res.status(404).send('Character not found');
+    }
+
+    // Update character.data
+    const documentData = [];
+    let index = 0;
+    while (req.body[`fieldName${index}-input`]) {
+      const fieldName = req.body[`fieldName${index}-input`];
+      const fieldValue = req.body[`fieldValue${index}-input`];
+      documentData.push({ fieldName, fieldValue });
+      index++;
+    }
+
+    if (documentData.length > 0) {
+      // Find and update the matching document in character.data
+      for (const doc of documentData) {
+        const existingDocIndex = updatedCharacter.data.findIndex(
+          (item) => item.fieldName === doc.fieldName
+        );
+        if (existingDocIndex !== -1) {
+          updatedCharacter.data[existingDocIndex].fieldValue = doc.fieldValue;
+        }
+      }
+    }
+
+    await updatedCharacter.save();
+
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send('An error occurred');
@@ -1580,6 +1599,6 @@ app.post('/userUpdateCompany', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen(8000, () => {
     console.log('App Is Running On Port 3000')
 })

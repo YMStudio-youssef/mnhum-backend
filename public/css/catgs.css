@@ -28,6 +28,8 @@
 .catgs .catgs-box .catg .image img{
     border-radius: 20px;
     width: 100%;
+    object-fit: cover;
+    object-position: center center;
     padding: 10px;
 }
 .catgs .catgs-box .catg .info{

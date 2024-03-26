@@ -16,6 +16,8 @@
 .trends-characters .characters-box .character .image img{
     border-radius: 20px;
     width: 100%;
+    object-fit: cover;
+    object-position: center center;
     padding: 10px;
 }
 .trends-characters .characters-box .character .info{
@@ -52,6 +54,8 @@
 }
 .trends-companys .companys-box .company .image img{
     width: 100%;
+    object-fit: cover;
+    object-position: center center;
     border-radius: 20px;
 }
 .trends-companys .companys-box .company .info{
@@ -79,6 +83,8 @@
 }
 .catgs-choosen .catgs-box .catg .image img{
     width: 100%;
+    object-fit: cover;
+    object-position: center center;
     border-radius: 20px;
 }
 .catgs-choosen .catgs-box .catg .info{
